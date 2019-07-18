@@ -1,0 +1,1 @@
+# cashreg-adapter-orangedata

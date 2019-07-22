@@ -13,4 +13,4 @@
 ### Содержание:
 
 1. [Настройки](docs/settings.md)
-1. [Бизнес.ру](docs/orangedata/)
+1. [Штрих-М (orangedata)](docs/orangedata/)

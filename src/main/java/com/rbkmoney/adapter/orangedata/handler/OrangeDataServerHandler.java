@@ -17,13 +17,16 @@ import com.rbkmoney.damsel.cashreg.provider.CashRegResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 
 @Slf4j
+@Primary
 @Component
 @RequiredArgsConstructor
 public class OrangeDataServerHandler implements CashRegProviderSrv.Iface {
@@ -32,7 +35,7 @@ public class OrangeDataServerHandler implements CashRegProviderSrv.Iface {
     private final ExitModelToProxyResultConverter exitModelToProxyResultConverter;
     private final StepResolver stepResolver;
     private final CashRegContextValidator cashRegContextValidator;
-    private final List<CommonHandler<ExitStateModel, Response, EntryStateModel>> handlers;
+    private final List<CommonHandler<ExitStateModel, ResponseEntity<Response>, EntryStateModel>> handlers;
 
     @Override
     public CashRegResult register(CashRegContext context) throws TException {

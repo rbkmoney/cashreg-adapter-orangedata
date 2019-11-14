@@ -15,6 +15,11 @@ management:
         flavor: etsy
         enabled: false
 ---
+keystore:
+  type: pkcs12
+  password: 12345
+  certificate: file:/opt/java/starrys/ssl/orangedata.p12
+---
 server:
   port: @server.port@
 ---

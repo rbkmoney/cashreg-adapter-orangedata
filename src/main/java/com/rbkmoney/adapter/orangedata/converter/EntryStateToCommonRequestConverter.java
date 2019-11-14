@@ -59,7 +59,6 @@ public class EntryStateToCommonRequestConverter implements Converter<EntryStateM
         content.setCustomerContact(entryStateModel.getClient().getEmail());
         request.setContent(content);
 
-
         return new RequestWrapper<>(
                 request,
                 entryStateModel.getOptions().getOrDefault(OptionalField.URL.getField(), adapterCashRegProperties.getUrl()),

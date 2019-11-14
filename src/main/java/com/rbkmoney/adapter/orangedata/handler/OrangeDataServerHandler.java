@@ -1,22 +1,26 @@
 package com.rbkmoney.adapter.orangedata.handler;
 
 
-import com.rbkmoney.adapter.orangedata.service.orangedata.OrangeDataClient;
+import com.rbkmoney.adapter.cashreg.spring.boot.starter.exception.UnsupportedMethodException;
+import com.rbkmoney.adapter.cashreg.spring.boot.starter.flow.StepResolver;
+import com.rbkmoney.adapter.cashreg.spring.boot.starter.handler.CommonHandler;
+import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.EntryStateModel;
+import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.ExitStateModel;
+import com.rbkmoney.adapter.common.Validator;
+import com.rbkmoney.adapter.orangedata.converter.entry.CtxToEntryModelConverter;
+import com.rbkmoney.adapter.orangedata.converter.exit.ExitModelToProxyResultConverter;
 import com.rbkmoney.adapter.orangedata.service.orangedata.model.Response;
-import com.rbkmoney.cashreg.proto.provider.*;
+import com.rbkmoney.adapter.orangedata.validator.CashRegContextValidator;
+import com.rbkmoney.damsel.cashreg.provider.CashRegContext;
+import com.rbkmoney.damsel.cashreg.provider.CashRegProviderSrv;
+import com.rbkmoney.damsel.cashreg.provider.CashRegResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpStatus;
 import org.apache.thrift.TException;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import static com.rbkmoney.adapter.orangedata.utils.wrapper.cashreg.constant.Error.DEFAULT_ERROR_CODE;
-import static com.rbkmoney.adapter.orangedata.utils.wrapper.cashreg.creators.CashRegProviderCreators.*;
 
 
 @Slf4j
@@ -24,119 +28,47 @@ import static com.rbkmoney.adapter.orangedata.utils.wrapper.cashreg.creators.Cas
 @RequiredArgsConstructor
 public class OrangeDataServerHandler implements CashRegProviderSrv.Iface {
 
-    private final OrangeDataClient client;
+    private final CtxToEntryModelConverter ctxToEntryModelConverter;
+    private final ExitModelToProxyResultConverter exitModelToProxyResultConverter;
+    private final StepResolver stepResolver;
+    private final CashRegContextValidator cashRegContextValidator;
+    private final List<CommonHandler<ExitStateModel, Response, EntryStateModel>> handlers;
 
     @Override
-    public CashRegResult debit(CashRegContext context) throws TException {
-        String requestId = context.getRequestId();
-        log.info("Start: debit with request_id {}", requestId);
-        try {
-            ResponseEntity<Response> responseEntity = (ResponseEntity<Response>) client.debit(context);
-            Intent intent = getIntent(responseEntity, responseEntity.getBody(), requestId);
-            String originalResponse = Objects.requireNonNull(responseEntity.getBody()).toString();
-            CashRegResult cashRegResult = createCashRegResult(intent, originalResponse);
-            log.info("Finish: debit with request_id {}, response {}", requestId, responseEntity);
-            return cashRegResult;
-        } catch (Exception ex) {
-            log.error("Exception with request_id {}: ", context.getRequestId());
-            throw new RuntimeException(ex);
-        }
+    public CashRegResult register(CashRegContext context) throws TException {
+        return handle(
+                cashRegContextValidator,
+                ctxToEntryModelConverter,
+                exitModelToProxyResultConverter,
+                context
+        );
     }
 
-    @Override
-    public CashRegResult credit(CashRegContext context) throws TException {
-        throw new TException("Method Credit Not Supported");
+    private <T, R> R handle(
+            Validator<T> validator,
+            Converter<T, EntryStateModel> entryConverter,
+            Converter<ExitStateModel, R> exitConverter,
+            T context
+    ) throws TException {
+        EntryStateModel entryStateModel = prepareEntryState(validator, entryConverter, context);
+        ExitStateModel exitStateModel = handlers.stream()
+                .filter(handler -> handler.isHandler(entryStateModel))
+                .findFirst()
+                .orElseThrow(UnsupportedMethodException::new)
+                .handle(entryStateModel);
+        exitStateModel.getAdapterContext().setNextStep(stepResolver.resolveExit(exitStateModel));
+        return exitConverter.convert(exitStateModel);
     }
 
-    @Override
-    public CashRegResult refundDebit(CashRegContext context) throws TException {
-        String requestId = context.getRequestId();
-        log.info("Start: refund debit with request_id {}", requestId);
-        try {
-            ResponseEntity<Response> responseEntity = (ResponseEntity<Response>) client.refundDebit(context);
-            Intent intent = getIntent(responseEntity, responseEntity.getBody(), requestId);
-            String originalResponse = Objects.requireNonNull(responseEntity.getBody()).toString();
-            CashRegResult cashRegResult = createCashRegResult(intent, originalResponse);
-            log.info("Finish: refund debit with request_id {}, response {}", requestId, responseEntity);
-            return cashRegResult;
-        } catch (Exception ex) {
-            log.error("Exception with request_id {}: ", context.getRequestId());
-            throw new RuntimeException(ex);
-        }
+    private <T> EntryStateModel prepareEntryState(
+            Validator<T> validator,
+            Converter<T, EntryStateModel> entryConverter,
+            T context
+    ) {
+        validator.validate(context);
+        EntryStateModel entryStateModel = entryConverter.convert(context);
+        entryStateModel.getState().getAdapterContext().setNextStep(stepResolver.resolveEntry(entryStateModel));
+        return entryStateModel;
     }
 
-    @Override
-    public CashRegResult refundCredit(CashRegContext context) throws TException {
-        throw new TException("Method Credit Not Supported");
-    }
-
-    @Override
-    public CashRegResult getStatus(CashRegContext context) throws TException {
-        String requestId = context.getRequestId();
-        log.info("Start: status with request_id {}", requestId);
-        try {
-            ResponseEntity<Response> responseEntity = (ResponseEntity<Response>) client.getStatus(context);
-            Intent intent;
-            if (responseEntity.getStatusCode().is4xxClientError()) {
-                String reasonPhrase = org.springframework.http.HttpStatus.valueOf(responseEntity.getStatusCode().value()).getReasonPhrase();
-                intent = createFinishIntentFailure(createFailure(DEFAULT_ERROR_CODE, reasonPhrase));
-            } else {
-                Response response = responseEntity.getBody();
-                intent = getIntent(responseEntity, response, requestId);
-            }
-
-            String originalResponse = Objects.requireNonNull(responseEntity.getBody()).toString();
-            CashRegResult cashRegResult = createCashRegResult(intent, originalResponse);
-            log.info("Finish: status with request_id {}, response {}", context.getRequestId(), responseEntity);
-            return cashRegResult;
-        } catch (Exception ex) {
-            log.error("Exception with request_id {}: ", context.getRequestId());
-            throw new RuntimeException(ex);
-        }
-    }
-
-    private static boolean hasError(Response response) {
-        return response.getErrors().isEmpty();
-    }
-
-    private Intent getIntent(ResponseEntity<Response> responseEntity, Response response, String requestId) {
-        Intent intent;
-        if (responseEntity.getStatusCode().is4xxClientError()) {
-            intent = createFinishIntentFailure(createFailure(DEFAULT_ERROR_CODE, getReasonPhraseFromEntityByCode(responseEntity)));
-        } else if (hasError(response)) {
-            intent = createFinishIntentFailure(createFailure(DEFAULT_ERROR_CODE, convertListToString(response.getErrors())));
-        } else if (isCreated(responseEntity)) {
-            intent = createFinishIntentSuccess(requestId);
-        } else if (isDelivered(responseEntity)) {
-            intent = createFinishIntentSuccess(preparePayload(response));
-        } else {
-            intent = createFinishIntentFailure(createFailure(DEFAULT_ERROR_CODE, getReasonPhraseFromEntityByCode(responseEntity)));
-        }
-        return intent;
-    }
-
-    public String getReasonPhraseFromEntityByCode(ResponseEntity<Response> responseEntity) {
-        return org.springframework.http.HttpStatus.valueOf(responseEntity.getStatusCode().value()).getReasonPhrase();
-    }
-
-    public boolean isCreated(ResponseEntity<Response> responseEntity) {
-        return HttpStatus.SC_CREATED == responseEntity.getStatusCode().value();
-    }
-
-    public boolean isDelivered(ResponseEntity<Response> responseEntity) {
-        return HttpStatus.SC_OK == responseEntity.getStatusCode().value();
-    }
-
-    private static Payload preparePayload(Response response) {
-        Payload payload = new Payload();
-        payload.setFnsSite(response.getFnsWebsite());
-        payload.setFnNumber(response.getFsNumber());
-        payload.setShiftNumber(response.getShiftNumber().toString());
-        return payload;
-    }
-
-    public static String convertListToString(List<String> errors) {
-        return errors.stream().map(Object::toString)
-                .collect(Collectors.joining(", "));
-    }
 }

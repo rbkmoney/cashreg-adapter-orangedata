@@ -1,19 +1,18 @@
 package com.rbkmoney.adapter.orangedata.servlet;
 
-import com.rbkmoney.adapter.orangedata.handler.OrangeDataServerHandler;
-import com.rbkmoney.cashreg.proto.provider.CashRegProviderSrv;
+import com.rbkmoney.damsel.cashreg.provider.CashRegProviderSrv;
 import com.rbkmoney.woody.thrift.impl.http.THServiceBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import java.io.IOException;
 
+@RequiredArgsConstructor
 @WebServlet("/adapter/cashreg/orangedata")
 public class AdapterServlet extends GenericServlet {
 
-    @Autowired
-    private OrangeDataServerHandler handler;
+    private final CashRegProviderSrv.Iface handler;
 
     private Servlet servlet;
 

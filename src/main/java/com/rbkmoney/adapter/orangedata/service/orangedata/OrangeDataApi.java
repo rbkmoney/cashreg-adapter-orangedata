@@ -1,12 +1,12 @@
 package com.rbkmoney.adapter.orangedata.service.orangedata;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rbkmoney.adapter.orangedata.configuration.properties.OrangeDataProperties;
+import com.rbkmoney.adapter.cashreg.spring.boot.starter.utils.converter.ip.ConverterIp;
 import com.rbkmoney.adapter.orangedata.service.orangedata.constant.HeaderField;
 import com.rbkmoney.adapter.orangedata.service.orangedata.model.Request;
+import com.rbkmoney.adapter.orangedata.service.orangedata.model.RequestWrapper;
 import com.rbkmoney.adapter.orangedata.service.orangedata.model.Response;
 import com.rbkmoney.adapter.orangedata.service.orangedata.signer.Signer;
-import com.rbkmoney.adapter.orangedata.utils.ConverterIp;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -30,14 +30,14 @@ public class OrangeDataApi {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final ConverterIp converterIp;
-    private final OrangeDataProperties orangeDataProperties;
 
-    public ResponseEntity<Response> create(Request request) {
+
+    public ResponseEntity<Response> create(RequestWrapper<Request> requestWrapper) {
         try {
-            String body = objectMapper.writeValueAsString(request);
+            String body = objectMapper.writeValueAsString(requestWrapper.getRequest());
             log.info("create with request: {}", body);
 
-            String url = prepareUrl("documents/");
+            String url = prepareUrl(requestWrapper.getUrl(),"documents/");
             log.info("create with url: {}", url);
             String signature = signer.sign(body, privateKey);
             HttpEntity httpEntity = new HttpEntity(body, getHttpHeaders(signature));
@@ -52,10 +52,12 @@ public class OrangeDataApi {
         }
     }
 
-    public ResponseEntity<Response> status(String inn, String documentId) {
+    public ResponseEntity<Response> status(RequestWrapper<Request> requestWrapper) {
+        String inn = requestWrapper.getRequest().getInn();
+        String documentId = requestWrapper.getRequest().getId();
         log.info("status with request: inn {}, documentId {}", inn, documentId);
 
-        String prepareUrl = prepareUrl("documents/" + inn + "/status/" + documentId);
+        String prepareUrl = prepareUrl(requestWrapper.getUrl(), "documents/" + inn + "/status/" + documentId);
         log.info("status with url: {}", prepareUrl);
         ResponseEntity<Response> responseEntity = restTemplate.exchange(
                 prepareUrl, HttpMethod.GET, HttpEntity.EMPTY, Response.class
@@ -65,7 +67,7 @@ public class OrangeDataApi {
         return responseEntity;
     }
 
-    private String prepareUrl(String fullPath) {
+    private String prepareUrl(String url, String fullPath) {
         return converterIp.replaceIpv4ToIpv6(url + fullPath);
     }
 

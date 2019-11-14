@@ -18,16 +18,23 @@ management:
 server:
   port: @server.port@
 ---
-restTemplate:
-  networkTimeout: 3000
----
 converterIp:
   nat64prefix: "2a04:4a00:5:10ff:4:1:"
 ---
 restTemplate:
-  connectTimeout: 3000
-  connectionRequestTimeout: 60000
-  readTimeout: 60000
+  requestTimeout: 60000
+  poolTimeout: 10000
+  connectionTimeout: 10000
+  maxTotalPooling: 200
+  defaultMaxPerRoute: 200
 ---
-orangedata:
+adapter-cashreg:
   url: "https://apip.orangedata.ru:2443/api/v2/"
+---
+timer:
+  maxTimePolling: 600
+  pollingDelay: 600
+---
+error-mapping:
+  file: classpath:fixture/errors.json
+  patternReason: "'%s' - '%s'" # 'code' - 'description'

@@ -1,18 +1,20 @@
 package com.rbkmoney.adapter.orangedata.service.orangedata;
 
-import com.rbkmoney.cashreg.proto.provider.CashRegContext;
+import com.rbkmoney.adapter.orangedata.service.orangedata.model.Request;
+import com.rbkmoney.adapter.orangedata.service.orangedata.model.RequestWrapper;
+import com.rbkmoney.adapter.orangedata.service.orangedata.model.Response;
 import org.springframework.http.ResponseEntity;
 
 public interface AdapterCashReg {
 
-    ResponseEntity<?> debit(CashRegContext context);
+    ResponseEntity<Response> debit(RequestWrapper<Request> request);
 
-    ResponseEntity<?> credit(CashRegContext context);
+    ResponseEntity<Response> credit(RequestWrapper<Request> request);
 
-    ResponseEntity<?> refundDebit(CashRegContext context);
+    ResponseEntity<Response> refundDebit(RequestWrapper<Request> request);
 
-    ResponseEntity<?> refundCredit(CashRegContext context);
+    ResponseEntity<Response> refundCredit(RequestWrapper<Request> request);
 
-    ResponseEntity<?> getStatus(CashRegContext context);
+    ResponseEntity<Response> status(RequestWrapper<Request> request);
 
 }

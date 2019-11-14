@@ -32,24 +32,34 @@
         <logstash-logback-encoder.version>5.2</logstash-logback-encoder.version>
         <nop-rolling.version>1.0.1</nop-rolling.version>
         <geck.version>0.6.9</geck.version>
-
         <lombok.version>1.18.4</lombok.version>
-
+        <adapter-common-lib.version>0.0.8</adapter-common-lib.version>
         <testcontainers.version>1.10.2</testcontainers.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <adapter-bank-spring-boot-starter-test.version>0.0.1-SNAPSHOT</adapter-bank-spring-boot-starter-test.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.rbkmoney</groupId>
+            <artifactId>adapter-cashreg-spring-boot-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rbkmoney</groupId>
             <artifactId>cashreg-proto</artifactId>
-            <version>SNAPSHOT</version>
+            <version>1.9-9c79023</version>
         </dependency>
         <!--Thrirdparty libs-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.rbkmoney</groupId>
+            <artifactId>error-mapping-java</artifactId>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -100,6 +110,17 @@
             <groupId>com.rbkmoney</groupId>
             <artifactId>shared-resources</artifactId>
             <version>${shared.resources.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rbkmoney</groupId>
+            <artifactId>adapter-common-lib</artifactId>
+            <version>${adapter-common-lib.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rbkmoney</groupId>
+            <artifactId>adapter-bank-spring-boot-starter-test</artifactId>
+            <version>${adapter-bank-spring-boot-starter-test.version}</version>
+            <scope>test</scope>
         </dependency>
         <!--Test libs-->
         <dependency>

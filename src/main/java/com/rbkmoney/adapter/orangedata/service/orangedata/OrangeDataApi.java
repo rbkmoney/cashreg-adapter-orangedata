@@ -35,17 +35,17 @@ public class OrangeDataApi {
     public ResponseEntity<Response> create(RequestWrapper<Request> requestWrapper) {
         try {
             String body = objectMapper.writeValueAsString(requestWrapper.getRequest());
-            log.info("create with request: {}", body);
+            log.info("Create with request: {}", body);
 
-            String url = prepareUrl(requestWrapper.getUrl(),"documents/");
-            log.info("create with url: {}", url);
+            String url = prepareUrl(requestWrapper.getUrl(), "documents/");
+            log.info("Create with url: {}", url);
             String signature = signer.sign(body, privateKey);
-            HttpEntity httpEntity = new HttpEntity(body, getHttpHeaders(signature));
+            HttpEntity httpEntity = new HttpEntity<>(body, getHttpHeaders(signature));
 
             ResponseEntity<Response> responseEntity = restTemplate.exchange(
                     url, HttpMethod.POST, httpEntity, Response.class
             );
-            log.info("create with response: {}", responseEntity);
+            log.info("Create with response: {}", responseEntity);
             return responseEntity;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
@@ -55,15 +55,15 @@ public class OrangeDataApi {
     public ResponseEntity<Response> status(RequestWrapper<Request> requestWrapper) {
         String inn = requestWrapper.getRequest().getInn();
         String documentId = requestWrapper.getRequest().getId();
-        log.info("status with request: inn {}, documentId {}", inn, documentId);
+        log.info("Status with request: inn {}, documentId {}", inn, documentId);
 
         String prepareUrl = prepareUrl(requestWrapper.getUrl(), "documents/" + inn + "/status/" + documentId);
-        log.info("status with url: {}", prepareUrl);
+        log.info("Status with url: {}", prepareUrl);
         ResponseEntity<Response> responseEntity = restTemplate.exchange(
                 prepareUrl, HttpMethod.GET, HttpEntity.EMPTY, Response.class
         );
 
-        log.info("status with response: {}", responseEntity);
+        log.info("Status with response: {}", responseEntity);
         return responseEntity;
     }
 

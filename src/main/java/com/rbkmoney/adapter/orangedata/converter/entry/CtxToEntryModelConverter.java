@@ -95,22 +95,23 @@ public class CtxToEntryModelConverter implements Converter<CashRegContext, Entry
 
     private List<Items> prepareCart(Cart cart, Map<String, String> options) {
         List<Items> itemsList = new ArrayList<>();
-        cart.getLines().forEach(itemsLine -> {
-            BigDecimal sum = prepareAmount(itemsLine.getPrice().getAmount() * itemsLine.getQuantity());
-            itemsList.add(
-                    Items.builder()
-                            .quantity(new BigDecimal(itemsLine.getQuantity()).setScale(1))
-                            .price(prepareAmount(itemsLine.getPrice().getAmount()))
-                            .sum(sum)
-                            .vat(Vat.builder().type(itemsLine.getTax()).build())
-                            .paymentMethod(options.get(OptionalField.PAYMENT_METHOD.getField()))
-                            .paymentObject(options.get(OptionalField.PAYMENT_OBJECT.getField()))
-                            .name(itemsLine.getProduct())
-                            .build()
-            );
-        });
-
+        cart.getLines().forEach(itemsLine -> prepareItemList(options, itemsList, itemsLine));
         return itemsList;
+    }
+
+    private void prepareItemList(Map<String, String> options, List<Items> itemsList, ItemsLine itemsLine) {
+        BigDecimal sum = prepareAmount(itemsLine.getPrice().getAmount() * itemsLine.getQuantity());
+        itemsList.add(
+                Items.builder()
+                        .quantity(new BigDecimal(itemsLine.getQuantity()).setScale(1))
+                        .price(prepareAmount(itemsLine.getPrice().getAmount()))
+                        .sum(sum)
+                        .vat(Vat.builder().type(itemsLine.getTax()).build())
+                        .paymentMethod(options.get(OptionalField.PAYMENT_METHOD.getField()))
+                        .paymentObject(options.get(OptionalField.PAYMENT_OBJECT.getField()))
+                        .name(itemsLine.getProduct())
+                        .build()
+        );
     }
 
 }

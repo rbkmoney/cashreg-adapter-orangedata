@@ -3,9 +3,6 @@ package com.rbkmoney.adapter.orangedata.service.orangedata.constant;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-/**
- * Система налогообложения
- */
 @Getter
 @RequiredArgsConstructor
 public enum TaxationSystem {
@@ -16,8 +13,7 @@ public enum TaxationSystem {
     UNIFIED_TAX_ON_IMPUTED_INCOME(3, "Единый налог на вмененный доход, ЕНВД"),
     UNIFIED_AGRICULTURAL_TAX(4, "Единый сельскохозяйственный налог, ЕСН"),
     PATENT_SYSTEM_OF_TAXATION(5, "Патентная система налогообложения, Патент");
-
-
+    
     private final Integer code;
     private final String message;
 

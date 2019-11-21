@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-public class OrangeDataClientconfiguration {
+public class OrangeDataClientConfiguration {
 
     @Bean
     OrangeDataClient orangeDataClient(ObjectMapper objectMapper, RestTemplate restTemplate, ConverterIp converterIp) {

@@ -3,9 +3,7 @@ package com.rbkmoney.adapter.orangedata.service.orangedata.constant;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-/**
- * Ставка НДС
- */
+
 @Getter
 @RequiredArgsConstructor
 public enum Tax {
@@ -18,7 +16,6 @@ public enum Tax {
     VAT_110(4, "ставка НДС расч. 10/110"),
     VAT_0(5, "ставка НДС 0%"),
     NONE(6, "НДС не облагается");
-
 
     private final Integer code;
     private final String message;

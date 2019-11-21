@@ -30,19 +30,18 @@ public class SuccessProcessor implements Processor<ExitStateModel, EntryStateMod
             adapterState.setReceiptId(response.getId());
             adapterState.setCashRegId(entryStateModel.getCashRegId());
 
-            if (Step.CHECK_STATUS.equals(entryStateModel.getState().getAdapterContext().getNextStep())) {
-                if (isDelivered(responseEntity)) {
-                    CashRegInfo cashRegInfo = new CashRegInfo();
-                    cashRegInfo.setReceiptId(response.getId());
-                    cashRegInfo.setTotal(entryStateModel.getTotal().toString());
-                    cashRegInfo.setFiscalDocumentNumber(response.getFsNumber());
-                    cashRegInfo.setDeviceCode(response.getDeviceRN());
-                    cashRegInfo.setFnsSite(response.getFnsWebsite());
-                    cashRegInfo.setShiftNumber(response.getShiftNumber().toString());
-                    cashRegInfo.setTimestamp(response.getProcessedAt());
+            if (Step.CHECK_STATUS.equals(entryStateModel.getState().getAdapterContext().getNextStep())
+                    && isDelivered(responseEntity)) {
+                CashRegInfo cashRegInfo = new CashRegInfo();
+                cashRegInfo.setReceiptId(response.getId());
+                cashRegInfo.setTotal(entryStateModel.getTotal().toString());
+                cashRegInfo.setFiscalDocumentNumber(response.getFsNumber());
+                cashRegInfo.setDeviceCode(response.getDeviceRN());
+                cashRegInfo.setFnsSite(response.getFnsWebsite());
+                cashRegInfo.setShiftNumber(response.getShiftNumber().toString());
+                cashRegInfo.setTimestamp(response.getProcessedAt());
 
-                    exitStateModel.setCashRegInfo(cashRegInfo);
-                }
+                exitStateModel.setCashRegInfo(cashRegInfo);
             } else if (Step.CREATE.equals(entryStateModel.getState().getAdapterContext().getNextStep())) {
                 adapterState.setNextStep(Step.CHECK_STATUS);
             }

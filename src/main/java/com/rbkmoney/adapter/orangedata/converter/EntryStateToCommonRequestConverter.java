@@ -40,33 +40,28 @@ public class EntryStateToCommonRequestConverter implements Converter<EntryStateM
         request.setKey(entryStateModel.getOptions().get(OptionalField.KEY.getField()));
 
         Content content = new Content();
-        List<Positions> positions = prepareCart(
-                entryStateModel.getItems(),
-                entryStateModel.getOptions()
-        );
+        List<Positions> positions = prepareCart(entryStateModel.getItems(), entryStateModel.getOptions());
         content.setPositions(positions);
 
         CheckClose checkClose = new CheckClose();
         checkClose.setTaxationSystem(convertTaxMode(entryStateModel.getCompany().getSno()));
 
-        List<Payments> payments = preparePaymentForCart(
-                entryStateModel.getItems(),
-                entryStateModel.getOptions()
-        );
+        List<Payments> payments = preparePaymentForCart(entryStateModel.getItems(), entryStateModel.getOptions());
         checkClose.setPayments(payments);
         content.setCheckClose(checkClose);
 
         content.setCustomerContact(entryStateModel.getClient().getEmail());
         request.setContent(content);
 
+        Map<String, String> options = entryStateModel.getOptions();
         return new RequestWrapper<>(
                 request,
-                entryStateModel.getOptions().getOrDefault(OptionalField.URL.getField(), adapterCashRegProperties.getUrl()),
-                entryStateModel.getOptions().get(OptionalField.GROUP.getField()),
-                entryStateModel.getOptions().get(OptionalField.COMPANY_NAME.getField()),
-                entryStateModel.getOptions().get(OptionalField.COMPANY_ADDRESS.getField()),
-                entryStateModel.getOptions().get(OptionalField.PRIVATE_KEY.getField()),
-                entryStateModel.getOptions().get(OptionalField.KEY.getField())
+                options.getOrDefault(OptionalField.URL.getField(), adapterCashRegProperties.getUrl()),
+                options.get(OptionalField.GROUP.getField()),
+                options.get(OptionalField.COMPANY_NAME.getField()),
+                options.get(OptionalField.COMPANY_ADDRESS.getField()),
+                options.get(OptionalField.PRIVATE_KEY.getField()),
+                options.get(OptionalField.KEY.getField())
         );
     }
 
@@ -97,12 +92,7 @@ public class EntryStateToCommonRequestConverter implements Converter<EntryStateM
             item.setPrice(items.getPrice());
             item.setQuantity(items.getQuantity());
 
-            String invoiceTaxId = items.getVat().getType();
-            Integer taxId = (invoiceTaxId != null && !invoiceTaxId.isEmpty())
-                    ? Vat.codeTextOf(invoiceTaxId).getCode()
-                    : Vat.NO_VAT.getCode();
-
-            item.setTax(taxId);
+            item.setTax(extractTaxId(items.getVat().getType()));
             item.setText(items.getName());
             positions.add(item);
         });
@@ -110,23 +100,31 @@ public class EntryStateToCommonRequestConverter implements Converter<EntryStateM
         return positions;
     }
 
+    private Integer extractTaxId(String invoiceTaxId) {
+        return (invoiceTaxId == null || invoiceTaxId.isEmpty())
+                ? Vat.NO_VAT.getCode()
+                : Vat.codeTextOf(invoiceTaxId).getCode();
+    }
+
     public List<Payments> preparePaymentForCart(List<Items> itemsList, Map<String, String> options) {
         List<Payments> payments = new ArrayList<>();
 
-        itemsList.forEach(items -> {
-            Payments payment = new Payments();
-            payment.setAmount(items.getPrice().multiply(items.getQuantity()));
-
-            if (options.get(PAYMENT_TYPE.getField()) != null) {
-                payment.setType(Integer.valueOf(options.get(PAYMENT_TYPE)));
-            } else {
-                payment.setType(PaymentType.E_CASH.getCode());
-            }
-
-            payments.add(payment);
-        });
+        itemsList.forEach(items -> fillPayments(options, payments, items));
 
         return payments;
+    }
+
+    private void fillPayments(Map<String, String> options, List<Payments> payments, Items items) {
+        Payments payment = new Payments();
+        payment.setAmount(items.getPrice().multiply(items.getQuantity()));
+
+        if (options.get(PAYMENT_TYPE.getField()) != null) {
+            payment.setType(Integer.valueOf(options.get(PAYMENT_TYPE.getField())));
+        } else {
+            payment.setType(PaymentType.E_CASH.getCode());
+        }
+
+        payments.add(payment);
     }
 
 }

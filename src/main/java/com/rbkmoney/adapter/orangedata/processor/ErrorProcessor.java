@@ -13,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.Instant;
 
+import static com.rbkmoney.adapter.cashreg.spring.boot.starter.constant.Error.SLEEP_TIMEOUT;
+import static com.rbkmoney.adapter.cashreg.spring.boot.starter.constant.Error.UNKNOWN;
+
 @Slf4j
 @RequiredArgsConstructor
 public class ErrorProcessor implements Processor<ExitStateModel, EntryStateModel, ResponseEntity<Response>> {
@@ -30,12 +33,12 @@ public class ErrorProcessor implements Processor<ExitStateModel, EntryStateModel
             exitStateModel.setEntryStateModel(entryStateModel);
         } else if (adapterState.getMaxDateTimePolling().getEpochSecond() < currentTime.getEpochSecond()) {
             log.error("Sleep Timeout for response: {}!", responseEntity);
-            exitStateModel.setErrorCode(com.rbkmoney.adapter.cashreg.spring.boot.starter.constant.Error.SLEEP_TIMEOUT.getCode());
-            exitStateModel.setErrorMessage(com.rbkmoney.adapter.cashreg.spring.boot.starter.constant.Error.SLEEP_TIMEOUT.getMessage());
+            exitStateModel.setErrorCode(SLEEP_TIMEOUT.getCode());
+            exitStateModel.setErrorMessage(SLEEP_TIMEOUT.getMessage());
         } else {
             log.error("Unknown result code for response: {}!", responseEntity);
-            exitStateModel.setErrorCode(com.rbkmoney.adapter.cashreg.spring.boot.starter.constant.Error.UNKNOWN.getCode());
-            exitStateModel.setErrorMessage(com.rbkmoney.adapter.cashreg.spring.boot.starter.constant.Error.UNKNOWN.getMessage());
+            exitStateModel.setErrorCode(UNKNOWN.getCode());
+            exitStateModel.setErrorMessage(UNKNOWN.getMessage());
         }
         return exitStateModel;
     }

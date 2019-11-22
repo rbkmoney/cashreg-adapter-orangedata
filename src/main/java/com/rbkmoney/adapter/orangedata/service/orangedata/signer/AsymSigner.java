@@ -7,6 +7,9 @@ import java.security.spec.PKCS8EncodedKeySpec;
 
 public class AsymSigner implements com.rbkmoney.adapter.orangedata.service.orangedata.signer.Signer {
 
+    public static final String KEY_ALGORITHM = "RSA";
+    public static final String HASH_ALGORITHM = "SHA256withRSA";
+
     private KeyFactory keyFactory;
     private Signature sig;
 

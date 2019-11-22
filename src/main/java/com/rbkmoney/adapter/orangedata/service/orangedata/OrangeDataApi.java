@@ -35,13 +35,13 @@ public class OrangeDataApi {
             String body = objectMapper.writeValueAsString(requestWrapper.getRequest());
             log.info("Create with request: {}", body);
 
-            String url = prepareUrl(requestWrapper.getUrl(), "documents/");
-            log.info("Create with url: {}", url);
+            String prepareUrl = prepareUrl(requestWrapper.getUrl(), "documents/");
+            log.info("Create with url: {}", prepareUrl);
             String signature = signer.sign(body, privateKey);
             HttpEntity httpEntity = new HttpEntity<>(body, getHttpHeaders(signature));
 
             ResponseEntity<Response> responseEntity = restTemplate.exchange(
-                    url, HttpMethod.POST, httpEntity, Response.class
+                    prepareUrl, HttpMethod.POST, httpEntity, Response.class
             );
             log.info("Create with response: {}", responseEntity);
             return responseEntity;

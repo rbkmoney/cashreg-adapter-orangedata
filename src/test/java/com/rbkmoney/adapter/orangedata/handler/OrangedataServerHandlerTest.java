@@ -1,6 +1,5 @@
 package com.rbkmoney.adapter.orangedata.handler;
 
-
 import com.rbkmoney.adapter.orangedata.IntegrationTest;
 import com.rbkmoney.adapter.orangedata.MockUtils;
 import com.rbkmoney.adapter.orangedata.service.orangedata.OrangeDataClient;

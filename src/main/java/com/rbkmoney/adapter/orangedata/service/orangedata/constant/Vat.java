@@ -1,6 +1,5 @@
 package com.rbkmoney.adapter.orangedata.service.orangedata.constant;
 
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

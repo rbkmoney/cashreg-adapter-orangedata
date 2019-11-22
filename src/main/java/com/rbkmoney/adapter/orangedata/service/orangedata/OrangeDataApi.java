@@ -7,9 +7,8 @@ import com.rbkmoney.adapter.orangedata.service.orangedata.model.Request;
 import com.rbkmoney.adapter.orangedata.service.orangedata.model.RequestWrapper;
 import com.rbkmoney.adapter.orangedata.service.orangedata.model.Response;
 import com.rbkmoney.adapter.orangedata.service.orangedata.signer.Signer;
-import lombok.Getter;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
@@ -18,8 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 @Slf4j
-@Getter
-@Setter
+@Data
 @RequiredArgsConstructor
 public class OrangeDataApi {
 

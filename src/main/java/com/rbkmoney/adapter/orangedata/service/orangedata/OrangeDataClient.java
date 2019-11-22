@@ -1,13 +1,11 @@
 package com.rbkmoney.adapter.orangedata.service.orangedata;
 
-
 import com.rbkmoney.adapter.orangedata.service.orangedata.constant.DocumentType;
 import com.rbkmoney.adapter.orangedata.service.orangedata.model.Request;
 import com.rbkmoney.adapter.orangedata.service.orangedata.model.RequestWrapper;
 import com.rbkmoney.adapter.orangedata.service.orangedata.model.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-
 
 @RequiredArgsConstructor
 public class OrangeDataClient implements AdapterCashReg {

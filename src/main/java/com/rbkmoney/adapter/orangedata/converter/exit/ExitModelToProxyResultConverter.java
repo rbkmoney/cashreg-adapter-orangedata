@@ -1,6 +1,5 @@
 package com.rbkmoney.adapter.orangedata.converter.exit;
 
-
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.config.properties.TimerProperties;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.AdapterState;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.EntryStateModel;
@@ -64,7 +63,6 @@ public class ExitModelToProxyResultConverter implements Converter<ExitStateModel
             entryStateModel.getState().getAdapterContext().setNextStep(Step.CHECK_STATUS);
             cashRegResult.setCashregInfo(exitStateModel.getCashRegInfo());
         }
-
         return cashRegResult;
     }
 

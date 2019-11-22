@@ -8,8 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum OptionalField {
 
-    PAYMENT_TYPE("payment_type"),
-    ;
+    PAYMENT_TYPE("payment_type");
 
     private final String field;
 }

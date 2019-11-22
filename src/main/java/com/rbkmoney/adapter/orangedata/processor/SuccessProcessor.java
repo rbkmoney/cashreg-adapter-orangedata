@@ -1,6 +1,5 @@
 package com.rbkmoney.adapter.orangedata.processor;
 
-
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.AdapterState;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.EntryStateModel;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.ExitStateModel;
@@ -55,5 +54,4 @@ public class SuccessProcessor implements Processor<ExitStateModel, EntryStateMod
     public boolean isDelivered(ResponseEntity<Response> entity) {
         return HttpStatus.SC_OK == entity.getStatusCode().value();
     }
-
 }

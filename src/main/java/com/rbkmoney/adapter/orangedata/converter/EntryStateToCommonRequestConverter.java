@@ -1,6 +1,5 @@
 package com.rbkmoney.adapter.orangedata.converter;
 
-
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.config.properties.AdapterCashRegProperties;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.constant.OptionalField;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.EntryStateModel;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.rbkmoney.adapter.orangedata.service.orangedata.constant.OptionalField.PAYMENT_TYPE;
-
 
 @Component
 @RequiredArgsConstructor
@@ -40,7 +38,7 @@ public class EntryStateToCommonRequestConverter implements Converter<EntryStateM
         request.setKey(entryStateModel.getOptions().get(OptionalField.KEY.getField()));
 
         Content content = new Content();
-        List<Positions> positions = prepareCart(entryStateModel.getItems(), entryStateModel.getOptions());
+        List<Positions> positions = prepareCart(entryStateModel.getItems());
         content.setPositions(positions);
 
         CheckClose checkClose = new CheckClose();
@@ -85,18 +83,16 @@ public class EntryStateToCommonRequestConverter implements Converter<EntryStateM
         }
     }
 
-    public List<Positions> prepareCart(List<Items> itemsList, Map<String, String> options) {
+    private List<Positions> prepareCart(List<Items> itemsList) {
         List<Positions> positions = new ArrayList<>();
         itemsList.forEach(items -> {
             Positions item = new Positions();
             item.setPrice(items.getPrice());
             item.setQuantity(items.getQuantity());
-
             item.setTax(extractTaxId(items.getVat().getType()));
             item.setText(items.getName());
             positions.add(item);
         });
-
         return positions;
     }
 
@@ -106,26 +102,21 @@ public class EntryStateToCommonRequestConverter implements Converter<EntryStateM
                 : Vat.codeTextOf(invoiceTaxId).getCode();
     }
 
-    public List<Payments> preparePaymentForCart(List<Items> itemsList, Map<String, String> options) {
+    private List<Payments> preparePaymentForCart(List<Items> itemsList, Map<String, String> options) {
         List<Payments> payments = new ArrayList<>();
-
         itemsList.forEach(items -> fillPayments(options, payments, items));
-
         return payments;
     }
 
     private void fillPayments(Map<String, String> options, List<Payments> payments, Items items) {
         Payments payment = new Payments();
         payment.setAmount(items.getPrice().multiply(items.getQuantity()));
-
         if (options.get(PAYMENT_TYPE.getField()) != null) {
             payment.setType(Integer.valueOf(options.get(PAYMENT_TYPE.getField())));
         } else {
             payment.setType(PaymentType.E_CASH.getCode());
         }
-
         payments.add(payment);
     }
 
 }
-

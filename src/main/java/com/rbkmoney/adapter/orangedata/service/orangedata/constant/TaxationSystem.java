@@ -25,5 +25,4 @@ public enum TaxationSystem {
         }
         throw new IllegalArgumentException("No matching for [" + code + "]");
     }
-
 }

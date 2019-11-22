@@ -14,8 +14,7 @@ import java.math.BigDecimal;
 public class Payments {
 
     /**
-     * Тип оплаты
-     * see {@link PaymentType}
+     * Тип оплаты. See {@link PaymentType}
      */
     @JsonProperty("type")
     private Integer type;

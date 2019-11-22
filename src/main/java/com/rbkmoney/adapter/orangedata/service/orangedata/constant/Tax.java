@@ -3,7 +3,6 @@ package com.rbkmoney.adapter.orangedata.service.orangedata.constant;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-
 @Getter
 @RequiredArgsConstructor
 public enum Tax {
@@ -28,6 +27,4 @@ public enum Tax {
         }
         throw new IllegalArgumentException("No matching for [" + code + "]");
     }
-
-
 }

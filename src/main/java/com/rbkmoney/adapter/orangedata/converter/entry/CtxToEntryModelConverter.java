@@ -1,6 +1,5 @@
 package com.rbkmoney.adapter.orangedata.converter.entry;
 
-
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.constant.OptionalField;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.constant.TargetType;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.converter.CashRegAdapterContextConverter;
@@ -30,51 +29,45 @@ public class CtxToEntryModelConverter implements Converter<CashRegContext, Entry
 
     @Override
     public EntryStateModel convert(CashRegContext context) {
-        AdapterState adapterState = cashRegAdapterContextConveter.convert(context);
-
         Map<String, String> options = context.getOptions();
-        EntryStateModel.EntryStateModelBuilder builder = EntryStateModel.builder();
-
-        builder.options(context.getOptions());
-        builder.cashRegId(context.getCashregId());
-
-        builder.auth(Auth.builder()
-                .login(options.get(OptionalField.LOGIN.getField()))
-                .pass(options.get(OptionalField.PASS.getField()))
-                .build());
-
         PaymentInfo paymentInfo = context.getSourceCreation().getPayment();
-        builder.client(Client.builder()
-                .email(paymentInfo.getEmail())
-                .build()
-        );
-
         RussianLegalEntity russianLegalEntity = context.getAccountInfo().getLegalEntity().getRussianLegalEntity();
-        builder.company(Company.builder()
-                .email(russianLegalEntity.getEmail())
-                .inn(russianLegalEntity.getInn())
-                .paymentAddress(russianLegalEntity.getActualAddress())
-                .sno(TaxMode.findByValue(russianLegalEntity.getTaxMode().getValue()).name())
-                .build()
-        );
-
-        builder.items(prepareCart(paymentInfo.getCart(), options));
-        builder.total(prepareAmount(paymentInfo.getCash().getAmount()));
-
         List<ItemsLine> itemsLines = paymentInfo.getCart().getLines();
-        builder.payments(itemsLines.stream().map(this::preparePayments).collect(Collectors.toList()));
-        builder.vats(itemsLines.stream().map(this::prepareVat).collect(Collectors.toList()));
 
         TargetType targetType = TargetTypeResolver.resolve(context.getSession().getType());
         StateModel.StateModelBuilder stateModelBuilder = StateModel.builder()
                 .targetType(targetType);
 
+        AdapterState adapterState = cashRegAdapterContextConveter.convert(context);
         if (adapterState != null) {
             stateModelBuilder.adapterContext(adapterState);
         }
 
-        builder.state(stateModelBuilder.build());
-        return builder.build();
+        return EntryStateModel.builder()
+                .options(context.getOptions())
+                .cashRegId(context.getCashregId())
+                .auth(Auth.builder()
+                        .login(options.get(OptionalField.LOGIN.getField()))
+                        .pass(options.get(OptionalField.PASS.getField()))
+                        .build()
+                )
+                .client(Client.builder()
+                        .email(paymentInfo.getEmail())
+                        .build()
+                )
+                .company(Company.builder()
+                        .email(russianLegalEntity.getEmail())
+                        .inn(russianLegalEntity.getInn())
+                        .paymentAddress(russianLegalEntity.getActualAddress())
+                        .sno(TaxMode.findByValue(russianLegalEntity.getTaxMode().getValue()).name())
+                        .build()
+                )
+                .items(prepareCart(paymentInfo.getCart(), options))
+                .total(prepareAmount(paymentInfo.getCash().getAmount()))
+                .payments(itemsLines.stream().map(this::preparePayments).collect(Collectors.toList()))
+                .vats(itemsLines.stream().map(this::prepareVat).collect(Collectors.toList()))
+                .state(stateModelBuilder.build())
+                .build();
     }
 
     private Vat prepareVat(ItemsLine itemsLine) {
@@ -101,16 +94,15 @@ public class CtxToEntryModelConverter implements Converter<CashRegContext, Entry
 
     private void prepareItemList(Map<String, String> options, List<Items> itemsList, ItemsLine itemsLine) {
         BigDecimal sum = prepareAmount(itemsLine.getPrice().getAmount() * itemsLine.getQuantity());
-        itemsList.add(
-                Items.builder()
-                        .quantity(new BigDecimal(itemsLine.getQuantity()).setScale(1))
-                        .price(prepareAmount(itemsLine.getPrice().getAmount()))
-                        .sum(sum)
-                        .vat(Vat.builder().type(itemsLine.getTax()).build())
-                        .paymentMethod(options.get(OptionalField.PAYMENT_METHOD.getField()))
-                        .paymentObject(options.get(OptionalField.PAYMENT_OBJECT.getField()))
-                        .name(itemsLine.getProduct())
-                        .build()
+        itemsList.add(Items.builder()
+                .quantity(new BigDecimal(itemsLine.getQuantity()).setScale(1))
+                .price(prepareAmount(itemsLine.getPrice().getAmount()))
+                .sum(sum)
+                .vat(Vat.builder().type(itemsLine.getTax()).build())
+                .paymentMethod(options.get(OptionalField.PAYMENT_METHOD.getField()))
+                .paymentObject(options.get(OptionalField.PAYMENT_OBJECT.getField()))
+                .name(itemsLine.getProduct())
+                .build()
         );
     }
 

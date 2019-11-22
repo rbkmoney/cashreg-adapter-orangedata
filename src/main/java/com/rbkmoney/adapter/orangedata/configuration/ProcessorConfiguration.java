@@ -1,6 +1,5 @@
 package com.rbkmoney.adapter.orangedata.configuration;
 
-
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.EntryStateModel;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.ExitStateModel;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.processor.Processor;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
-
 
 @Configuration
 @RequiredArgsConstructor

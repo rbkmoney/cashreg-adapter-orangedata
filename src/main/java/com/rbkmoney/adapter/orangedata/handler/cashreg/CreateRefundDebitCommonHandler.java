@@ -14,7 +14,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class CreateRefundDebitCommonHandler extends CommonHandlerImpl<ExitStateModel, RequestWrapper<Request>, ResponseEntity<Response>, EntryStateModel> {
 
@@ -31,5 +30,4 @@ public class CreateRefundDebitCommonHandler extends CommonHandlerImpl<ExitStateM
         return Step.CREATE.equals(entryStateModel.getState().getAdapterContext().getNextStep())
                 && TargetType.REFUND_DEBIT.equals(entryStateModel.getState().getTargetType());
     }
-
 }

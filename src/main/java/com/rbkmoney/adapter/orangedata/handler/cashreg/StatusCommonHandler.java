@@ -1,6 +1,5 @@
 package com.rbkmoney.adapter.orangedata.handler.cashreg;
 
-
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.handler.CommonHandlerImpl;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.EntryStateModel;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.ExitStateModel;
@@ -13,7 +12,6 @@ import com.rbkmoney.adapter.orangedata.service.orangedata.model.Response;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
 
 @Component
 public class StatusCommonHandler extends CommonHandlerImpl<ExitStateModel, RequestWrapper<Request>, ResponseEntity<Response>, EntryStateModel> {

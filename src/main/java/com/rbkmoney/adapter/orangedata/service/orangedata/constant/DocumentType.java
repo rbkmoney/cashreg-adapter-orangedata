@@ -1,6 +1,5 @@
 package com.rbkmoney.adapter.orangedata.service.orangedata.constant;
 
-
 public class DocumentType {
 
     //Приход

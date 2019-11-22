@@ -12,30 +12,26 @@ import static org.mockito.Mockito.doAnswer;
 public class MockUtils {
 
     public static void mockClient(OrangeDataClient client) {
-        doAnswer((Answer<ResponseEntity<Response>>) invocation -> {
-            Response response = new Response();
-            response.setId("id");
-            response.setFsNumber("FsNumber");
-            response.setDeviceRN("DeviceRN");
-            response.setFnsWebsite("FnsWebsite");
-            response.setShiftNumber(1);
-            response.setProcessedAt("ProcessedAt");
-            return ResponseEntity
-                    .status(org.apache.http.HttpStatus.SC_CREATED)
-                    .body(response);
-        }).when(client).debit(any());
+        doAnswer((Answer<ResponseEntity<Response>>) invocation -> ResponseEntity
+                .status(org.apache.http.HttpStatus.SC_CREATED)
+                .body(Response.builder()
+                        .id("id")
+                        .fsNumber("FsNumber")
+                        .deviceRN("DeviceRN")
+                        .fnsWebsite("FnsWebsite")
+                        .shiftNumber(1)
+                        .processedAt("ProcessedAt")
+                        .build())).when(client).debit(any());
 
-        doAnswer((Answer<ResponseEntity<Response>>) invocation -> {
-            Response response = new Response();
-            response.setId("id");
-            response.setFsNumber("FsNumber");
-            response.setDeviceRN("DeviceRN");
-            response.setFnsWebsite("FnsWebsite");
-            response.setShiftNumber(1);
-            response.setProcessedAt("ProcessedAt");
-            return ResponseEntity
-                    .status(org.apache.http.HttpStatus.SC_OK)
-                    .body(response);
-        }).when(client).status(any());
+        doAnswer((Answer<ResponseEntity<Response>>) invocation -> ResponseEntity
+                .status(org.apache.http.HttpStatus.SC_OK)
+                .body(Response.builder()
+                        .id("id")
+                        .fsNumber("FsNumber")
+                        .deviceRN("DeviceRN")
+                        .fnsWebsite("FnsWebsite")
+                        .shiftNumber(1)
+                        .processedAt("ProcessedAt")
+                        .build())).when(client).status(any());
     }
 }

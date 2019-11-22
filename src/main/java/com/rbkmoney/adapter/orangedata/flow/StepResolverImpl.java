@@ -1,6 +1,5 @@
 package com.rbkmoney.adapter.orangedata.flow;
 
-
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.flow.StepResolver;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.EntryStateModel;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.ExitStateModel;

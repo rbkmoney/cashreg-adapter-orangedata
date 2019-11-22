@@ -1,6 +1,5 @@
 package com.rbkmoney.adapter.orangedata.handler;
 
-
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.exception.UnsupportedMethodException;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.flow.StepResolver;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.handler.CommonHandler;
@@ -23,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-
 
 @Slf4j
 @Primary

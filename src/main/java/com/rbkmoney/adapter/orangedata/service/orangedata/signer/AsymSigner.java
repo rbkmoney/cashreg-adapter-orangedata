@@ -1,6 +1,5 @@
 package com.rbkmoney.adapter.orangedata.service.orangedata.signer;
 
-
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;

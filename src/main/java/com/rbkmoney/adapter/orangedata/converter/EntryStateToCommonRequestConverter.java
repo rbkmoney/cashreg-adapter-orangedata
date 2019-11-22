@@ -27,7 +27,6 @@ public class EntryStateToCommonRequestConverter implements Converter<EntryStateM
 
     @Override
     public RequestWrapper<Request> convert(EntryStateModel entryStateModel) {
-
         Request request = new Request();
         request.setId(entryStateModel.getCashRegId());
         if (entryStateModel.getOptions().get(OptionalField.GROUP.getField()) != null) {

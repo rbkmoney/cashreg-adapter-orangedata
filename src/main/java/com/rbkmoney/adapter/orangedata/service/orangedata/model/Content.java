@@ -14,8 +14,7 @@ import java.util.List;
 public class Content {
 
     /**
-     * Тип документа
-     * see {@link DocumentType}
+     * Тип документа, see {@link DocumentType}
      */
     @JsonProperty("type")
     private Integer type;

@@ -12,7 +12,7 @@ import java.io.IOException;
 @WebServlet("/adapter/cashreg/orangedata")
 public class AdapterServlet extends GenericServlet {
 
-    private transient final CashRegProviderSrv.Iface handler;
+    private final transient CashRegProviderSrv.Iface handler;
 
     private transient Servlet servlet;
 

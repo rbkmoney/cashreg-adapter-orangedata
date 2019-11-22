@@ -23,24 +23,21 @@ public class SuccessProcessor implements Processor<ExitStateModel, EntryStateMod
             ExitStateModel exitStateModel = new ExitStateModel();
             exitStateModel.setEntryStateModel(entryStateModel);
 
-            Response response = responseEntity.getBody();
-
             AdapterState adapterState = entryStateModel.getState().getAdapterContext();
+            Response response = responseEntity.getBody();
             adapterState.setReceiptId(response.getId());
             adapterState.setCashRegId(entryStateModel.getCashRegId());
 
             if (Step.CHECK_STATUS.equals(entryStateModel.getState().getAdapterContext().getNextStep())
                     && isDelivered(responseEntity)) {
-                CashRegInfo cashRegInfo = new CashRegInfo();
-                cashRegInfo.setReceiptId(response.getId());
-                cashRegInfo.setTotal(entryStateModel.getTotal().toString());
-                cashRegInfo.setFiscalDocumentNumber(response.getFsNumber());
-                cashRegInfo.setDeviceCode(response.getDeviceRN());
-                cashRegInfo.setFnsSite(response.getFnsWebsite());
-                cashRegInfo.setShiftNumber(response.getShiftNumber().toString());
-                cashRegInfo.setTimestamp(response.getProcessedAt());
-
-                exitStateModel.setCashRegInfo(cashRegInfo);
+                exitStateModel.setCashRegInfo(new CashRegInfo()
+                        .setReceiptId(response.getId())
+                        .setTotal(entryStateModel.getTotal().toString())
+                        .setFiscalDocumentNumber(response.getFsNumber())
+                        .setDeviceCode(response.getDeviceRN())
+                        .setFnsSite(response.getFnsWebsite())
+                        .setShiftNumber(response.getShiftNumber().toString())
+                        .setTimestamp(response.getProcessedAt()));
             } else if (Step.CREATE.equals(entryStateModel.getState().getAdapterContext().getNextStep())) {
                 adapterState.setNextStep(Step.CHECK_STATUS);
             }

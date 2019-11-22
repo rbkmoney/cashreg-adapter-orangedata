@@ -1,6 +1,6 @@
 package com.rbkmoney.adapter.orangedata.handler;
 
-import com.rbkmoney.adapter.orangedata.IntegrationTest;
+import com.rbkmoney.adapter.orangedata.AbstractIntegrationTest;
 import com.rbkmoney.adapter.orangedata.MockUtils;
 import com.rbkmoney.adapter.orangedata.service.orangedata.OrangeDataClient;
 import com.rbkmoney.damsel.cashreg.provider.CashRegContext;
@@ -15,7 +15,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import static junit.framework.TestCase.assertTrue;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class OrangedataServerHandlerTest extends IntegrationTest {
+public class OrangedataServerHandlerTest extends AbstractIntegrationTest {
 
     @MockBean
     public OrangeDataClient client;
@@ -26,14 +26,20 @@ public class OrangedataServerHandlerTest extends IntegrationTest {
         MockUtils.mockClient(client);
     }
 
+    /**
+     * Тест на регистрацию чека и проверку статуса его регистрации
+     */
     @Test
-    public void testRegister() throws TException {
+    public void testRegisterCheck() throws TException {
         CashRegContext cashRegContext = makeCashRegContext();
+        // Регистрация чека
         CashRegResult result = handler.register(cashRegContext);
         assertTrue(result.getIntent().isSetSleep());
 
+        // Сохранение состояния из предыдущего результата
         cashRegContext.getSession().setState(result.getState());
 
+        // Запрос финального статуса
         result = handler.register(cashRegContext);
         assertTrue(result.getIntent().isSetFinish());
     }

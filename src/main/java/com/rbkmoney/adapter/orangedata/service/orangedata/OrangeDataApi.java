@@ -22,7 +22,6 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class OrangeDataApi {
 
-    private String url = "https://apip.orangedata.ru:2443/api/v2/";
     private String privateKey;
 
     private final Signer signer;
@@ -55,7 +54,7 @@ public class OrangeDataApi {
         String documentId = requestWrapper.getRequest().getId();
         log.info("Status with request: inn {}, documentId {}", inn, documentId);
 
-        String prepareUrl = prepareUrl(requestWrapper.getUrl(), "documents/" + inn + "/status/" + documentId);
+        String prepareUrl = prepareUrl(requestWrapper.getUrl(), String.format("documents/%s/status/%s", inn, documentId));
         log.info("Status with url: {}", prepareUrl);
         ResponseEntity<Response> responseEntity = restTemplate.exchange(
                 prepareUrl, HttpMethod.GET, HttpEntity.EMPTY, Response.class

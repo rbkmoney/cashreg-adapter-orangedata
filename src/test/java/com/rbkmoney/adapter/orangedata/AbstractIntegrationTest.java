@@ -34,7 +34,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
         "keystore.certificate=classpath:ssl/orangedata.p12",
 })
 @ContextConfiguration(classes = CashRegOrangeDataApplication.class)
-public abstract class IntegrationTest {
+public abstract class AbstractIntegrationTest {
 
     @Autowired
     protected CashRegProviderSrv.Iface handler;

@@ -1,6 +1,10 @@
 package com.rbkmoney.adapter.orangedata;
 
-public class TestData {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class TestData {
 
     public static final String CASHREG_ID = "CashregId";
     public static final String PARTY_ID = "party_id";

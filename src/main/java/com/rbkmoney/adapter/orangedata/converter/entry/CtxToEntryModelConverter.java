@@ -1,7 +1,6 @@
 package com.rbkmoney.adapter.orangedata.converter.entry;
 
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.constant.OptionalField;
-import com.rbkmoney.adapter.cashreg.spring.boot.starter.constant.TargetType;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.converter.CashRegAdapterContextConverter;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.flow.TargetTypeResolver;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.*;
@@ -33,15 +32,13 @@ public class CtxToEntryModelConverter implements Converter<CashRegContext, Entry
         PaymentInfo paymentInfo = context.getSourceCreation().getPayment();
         RussianLegalEntity russianLegalEntity = context.getAccountInfo().getLegalEntity().getRussianLegalEntity();
         List<ItemsLine> itemsLines = paymentInfo.getCart().getLines();
-
-        TargetType targetType = TargetTypeResolver.resolve(context.getSession().getType());
-        StateModel.StateModelBuilder stateModelBuilder = StateModel.builder()
-                .targetType(targetType);
-
+        List<Payments> payments = itemsLines.stream()
+                .map(this::preparePayments)
+                .collect(Collectors.toList());
+        List<Vat> vats = itemsLines.stream()
+                .map(this::prepareVat)
+                .collect(Collectors.toList());
         AdapterState adapterState = cashRegAdapterContextConveter.convert(context);
-        if (adapterState != null) {
-            stateModelBuilder.adapterContext(adapterState);
-        }
 
         return EntryStateModel.builder()
                 .options(context.getOptions())
@@ -64,9 +61,13 @@ public class CtxToEntryModelConverter implements Converter<CashRegContext, Entry
                 )
                 .items(prepareCart(paymentInfo.getCart(), options))
                 .total(prepareAmount(paymentInfo.getCash().getAmount()))
-                .payments(itemsLines.stream().map(this::preparePayments).collect(Collectors.toList()))
-                .vats(itemsLines.stream().map(this::prepareVat).collect(Collectors.toList()))
-                .state(stateModelBuilder.build())
+                .payments(payments)
+                .vats(vats)
+                .state(StateModel.builder()
+                        .targetType(TargetTypeResolver.resolve(context.getSession().getType()))
+                        .adapterContext(adapterState)
+                        .build()
+                )
                 .build();
     }
 
@@ -79,7 +80,10 @@ public class CtxToEntryModelConverter implements Converter<CashRegContext, Entry
 
     private Payments preparePayments(ItemsLine itemsLine) {
         BigDecimal fullPriceAmount = prepareAmount(itemsLine.getPrice().getAmount() * itemsLine.getQuantity());
-        return Payments.builder().sum(fullPriceAmount).type(1).build();
+        return Payments.builder()
+                .sum(fullPriceAmount)
+                .type(1)
+                .build();
     }
 
     private BigDecimal prepareAmount(Long amount) {

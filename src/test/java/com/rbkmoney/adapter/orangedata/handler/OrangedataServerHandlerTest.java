@@ -31,16 +31,17 @@ public class OrangedataServerHandlerTest extends AbstractIntegrationTest {
      */
     @Test
     public void testRegisterCheck() throws TException {
-        CashRegContext cashRegContext = makeCashRegContext();
+        CashRegContext cashRegContextCreated = makeCashRegContext();
         // Регистрация чека
-        CashRegResult result = handler.register(cashRegContext);
+        CashRegResult result = handler.register(cashRegContextCreated);
         assertTrue(result.getIntent().isSetSleep());
 
         // Сохранение состояния из предыдущего результата
-        cashRegContext.getSession().setState(result.getState());
+        CashRegContext cashRegContextFinished = makeCashRegContext();
+        cashRegContextFinished.getSession().setState(result.getState());
 
         // Запрос финального статуса
-        result = handler.register(cashRegContext);
+        result = handler.register(cashRegContextFinished);
         assertTrue(result.getIntent().isSetFinish());
     }
 

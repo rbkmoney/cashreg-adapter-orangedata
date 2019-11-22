@@ -3,6 +3,7 @@ package com.rbkmoney.adapter.orangedata.service.orangedata;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.utils.converter.ip.ConverterIp;
 import com.rbkmoney.adapter.orangedata.service.orangedata.constant.HeaderField;
+import com.rbkmoney.adapter.orangedata.service.orangedata.exception.OrangeDataApiException;
 import com.rbkmoney.adapter.orangedata.service.orangedata.model.Request;
 import com.rbkmoney.adapter.orangedata.service.orangedata.model.RequestWrapper;
 import com.rbkmoney.adapter.orangedata.service.orangedata.model.Response;
@@ -29,7 +30,6 @@ public class OrangeDataApi {
     private final ObjectMapper objectMapper;
     private final ConverterIp converterIp;
 
-
     public ResponseEntity<Response> create(RequestWrapper<Request> requestWrapper) {
         try {
             String body = objectMapper.writeValueAsString(requestWrapper.getRequest());
@@ -46,7 +46,7 @@ public class OrangeDataApi {
             log.info("Create with response: {}", responseEntity);
             return responseEntity;
         } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            throw new OrangeDataApiException(ex);
         }
     }
 

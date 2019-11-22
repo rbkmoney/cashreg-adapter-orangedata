@@ -29,28 +29,31 @@ public class EntryStateToCommonRequestConverter implements Converter<EntryStateM
     public RequestWrapper<Request> convert(EntryStateModel entryStateModel) {
         Request request = new Request();
         request.setId(entryStateModel.getCashRegId());
-        if (entryStateModel.getOptions().get(OptionalField.GROUP.getField()) != null) {
-            request.setGroup(entryStateModel.getOptions().get(OptionalField.GROUP.getField()));
+        Map<String, String> options = entryStateModel.getOptions();
+
+        if (options.get(OptionalField.GROUP.getField()) != null) {
+            request.setGroup(options.get(OptionalField.GROUP.getField()));
         }
 
         request.setInn(entryStateModel.getCompany().getInn());
-        request.setKey(entryStateModel.getOptions().get(OptionalField.KEY.getField()));
+        request.setKey(options.get(OptionalField.KEY.getField()));
 
         Content content = new Content();
-        List<Positions> positions = prepareCart(entryStateModel.getItems());
+        List<Items> listItems = entryStateModel.getItems();
+        List<Positions> positions = prepareCart(listItems);
         content.setPositions(positions);
 
         CheckClose checkClose = new CheckClose();
         checkClose.setTaxationSystem(convertTaxMode(entryStateModel.getCompany().getSno()));
 
-        List<Payments> payments = preparePaymentForCart(entryStateModel.getItems(), entryStateModel.getOptions());
+        List<Payments> payments = preparePaymentForCart(listItems, options);
         checkClose.setPayments(payments);
         content.setCheckClose(checkClose);
 
         content.setCustomerContact(entryStateModel.getClient().getEmail());
         request.setContent(content);
 
-        Map<String, String> options = entryStateModel.getOptions();
+
         return new RequestWrapper<>(
                 request,
                 options.getOrDefault(OptionalField.URL.getField(), adapterCashRegProperties.getUrl()),

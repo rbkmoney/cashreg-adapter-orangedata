@@ -30,7 +30,9 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = DEFINED_PORT)
+@SpringBootTest(webEnvironment = DEFINED_PORT, properties = {
+        "keystore.certificate=classpath:ssl/orangedata.p12",
+})
 @ContextConfiguration(classes = CashRegOrangeDataApplication.class)
 public abstract class IntegrationTest {
 

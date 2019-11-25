@@ -46,7 +46,7 @@ public class OrangedataServerHandlerFailedTest extends AbstractIntegrationTest {
         CashRegContext cashRegContextCreated = makeCashRegContext(type);
         // Регистрация чека
         CashRegResult result = handler.register(cashRegContextCreated);
-        assertTrue(result.getIntent().isSetSleep());
+        assertTrue("Проверка, что чек зарегистрировали", result.getIntent().isSetSleep());
 
         // Сохранение состояния из предыдущего результата
         CashRegContext cashRegContextFinished = makeCashRegContext(type);
@@ -54,7 +54,7 @@ public class OrangedataServerHandlerFailedTest extends AbstractIntegrationTest {
 
         // Запрос финального статуса
         result = handler.register(cashRegContextFinished);
-        assertTrue(result.getIntent().getFinish().getStatus().isSetFailure());
+        assertTrue("Проверка на получение финального не успешного состояния", result.getIntent().getFinish().getStatus().isSetFailure());
     }
 
 }

@@ -27,35 +27,18 @@ public class OrangedataServerHandlerTest extends AbstractIntegrationTest {
         MockUtils.mockClient(client);
     }
 
-    /**
-     * Тест на регистрацию чека "Приход" и проверку статуса его регистрации
-     */
     @Test
-    public void testRegisterDebit() throws TException {
+    public void registerAndCheckStatus() throws TException {
+        // Тест на регистрацию чека "Приход" и проверку статуса его регистрации
         register(Type.debit(new Debit()));
-    }
 
-    /**
-     * Тест на регистрацию чека "Расход" и проверку статуса его регистрации
-     */
-    @Test
-    public void testRegisterCredit() throws TException {
+        // Тест на регистрацию чека "Расход" и проверку статуса его регистрации
         register(Type.credit(new Credit()));
-    }
 
-    /**
-     * Тест на регистрацию чека "Возврат Расхода" и проверку статуса его регистрации
-     */
-    @Test
-    public void testRegisterRefundCredit() throws TException {
+        // Тест на регистрацию чека "Возврат Расхода" и проверку статуса его регистрации
         register(Type.refund_credit(new RefundCredit()));
-    }
 
-    /**
-     * Тест на регистрацию чека "Возврат Прихода" и проверку статуса его регистрации
-     */
-    @Test
-    public void testRegisterRefundDebit() throws TException {
+        // Тест на регистрацию чека "Возврат Прихода" и проверку статуса его регистрации
         register(Type.refund_debit(new RefundDebit()));
     }
 

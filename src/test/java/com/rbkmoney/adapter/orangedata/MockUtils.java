@@ -2,6 +2,7 @@ package com.rbkmoney.adapter.orangedata;
 
 import com.rbkmoney.adapter.orangedata.service.orangedata.OrangeDataClient;
 import com.rbkmoney.adapter.orangedata.service.orangedata.model.Response;
+import org.apache.http.HttpStatus;
 import org.mockito.stubbing.Answer;
 import org.springframework.http.ResponseEntity;
 
@@ -20,29 +21,14 @@ public class MockUtils {
                 .processedAt("ProcessedAt")
                 .build();
 
-        doAnswer((Answer<ResponseEntity<Response>>) invocation -> ResponseEntity
-                .status(org.apache.http.HttpStatus.SC_CREATED)
-                .body(response))
-                .when(client)
-                .debit(any());
+        Answer<ResponseEntity<Response>> responseEntityAnswer = invocation -> ResponseEntity
+                .status(HttpStatus.SC_CREATED)
+                .body(response);
 
-        doAnswer((Answer<ResponseEntity<Response>>) invocation -> ResponseEntity
-                .status(org.apache.http.HttpStatus.SC_CREATED)
-                .body(response))
-                .when(client)
-                .credit(any());
-
-        doAnswer((Answer<ResponseEntity<Response>>) invocation -> ResponseEntity
-                .status(org.apache.http.HttpStatus.SC_CREATED)
-                .body(response))
-                .when(client)
-                .refundCredit(any());
-
-        doAnswer((Answer<ResponseEntity<Response>>) invocation -> ResponseEntity
-                .status(org.apache.http.HttpStatus.SC_CREATED)
-                .body(response))
-                .when(client)
-                .refundDebit(any());
+        doAnswer(responseEntityAnswer).when(client).debit(any());
+        doAnswer(responseEntityAnswer).when(client).credit(any());
+        doAnswer(responseEntityAnswer).when(client).refundCredit(any());
+        doAnswer(responseEntityAnswer).when(client).refundDebit(any());
 
         doAnswer((Answer<ResponseEntity<Response>>) invocation -> ResponseEntity
                 .status(org.apache.http.HttpStatus.SC_OK)

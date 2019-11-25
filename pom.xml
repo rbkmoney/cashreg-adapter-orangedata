@@ -117,6 +117,11 @@
             <version>${adapter-common-lib.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.rbkmoney.geck</groupId>
+            <artifactId>serializer</artifactId>
+            <version>0.6.7</version>
+        </dependency>
+        <dependency>
             <groupId>com.rbkmoney</groupId>
             <artifactId>adapter-bank-spring-boot-starter-test</artifactId>
             <version>${adapter-bank-spring-boot-starter-test.version}</version>

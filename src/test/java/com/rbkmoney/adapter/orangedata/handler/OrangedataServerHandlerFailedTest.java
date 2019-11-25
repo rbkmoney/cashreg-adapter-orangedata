@@ -16,7 +16,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import static junit.framework.TestCase.assertTrue;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class OrangedataServerHandlerTest extends AbstractIntegrationTest {
+public class OrangedataServerHandlerFailedTest extends AbstractIntegrationTest {
 
     @MockBean
     public OrangeDataClient client;
@@ -24,7 +24,7 @@ public class OrangedataServerHandlerTest extends AbstractIntegrationTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        MockUtils.mockClient(client);
+        MockUtils.mockClientFailed(client);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class OrangedataServerHandlerTest extends AbstractIntegrationTest {
 
         // Запрос финального статуса
         result = handler.register(cashRegContextFinished);
-        assertTrue(result.getIntent().isSetFinish());
+        assertTrue(result.getIntent().getFinish().getStatus().isSetFailure());
     }
 
 }

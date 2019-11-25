@@ -24,6 +24,8 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class OrangeDataApi {
 
+    public static final String STATUS_PATTERN = "documents/%s/status/%s";
+
     private final Signer signer;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
@@ -56,7 +58,7 @@ public class OrangeDataApi {
         String documentId = requestWrapper.getRequest().getId();
         log.info("Status with request: inn {}, documentId {}", inn, documentId);
 
-        String prepareUrl = prepareUrl(requestWrapper.getUrl(), String.format("documents/%s/status/%s", inn, documentId));
+        String prepareUrl = prepareUrl(requestWrapper.getUrl(), String.format(STATUS_PATTERN, inn, documentId));
         log.info("Status with url: {}", prepareUrl);
 
         try {

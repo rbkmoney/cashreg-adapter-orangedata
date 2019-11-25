@@ -18,7 +18,7 @@ public class Request {
     private String inn;
 
     @JsonProperty("group")
-    private String group = Group.DEFAULT;
+    private String group = Group.DEFAULT.getValue();
 
     @JsonProperty("content")
     private Content content;

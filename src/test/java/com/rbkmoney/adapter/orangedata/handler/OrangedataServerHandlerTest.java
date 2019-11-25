@@ -5,6 +5,7 @@ import com.rbkmoney.adapter.orangedata.MockUtils;
 import com.rbkmoney.adapter.orangedata.service.orangedata.OrangeDataClient;
 import com.rbkmoney.damsel.cashreg.provider.CashRegContext;
 import com.rbkmoney.damsel.cashreg.provider.CashRegResult;
+import com.rbkmoney.damsel.cashreg.type.*;
 import org.apache.thrift.TException;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,17 +28,45 @@ public class OrangedataServerHandlerTest extends AbstractIntegrationTest {
     }
 
     /**
-     * Тест на регистрацию чека и проверку статуса его регистрации
+     * Тест на регистрацию чека "Приход" и проверку статуса его регистрации
      */
     @Test
-    public void testRegisterCheck() throws TException {
-        CashRegContext cashRegContextCreated = makeCashRegContext();
+    public void testRegisterDebit() throws TException {
+        register(Type.debit(new Debit()));
+    }
+
+    /**
+     * Тест на регистрацию чека "Расход" и проверку статуса его регистрации
+     */
+    @Test
+    public void testRegisterCredit() throws TException {
+        register(Type.credit(new Credit()));
+    }
+
+    /**
+     * Тест на регистрацию чека "Возврат Расхода" и проверку статуса его регистрации
+     */
+    @Test
+    public void testRegisterRefundCredit() throws TException {
+        register(Type.refund_credit(new RefundCredit()));
+    }
+
+    /**
+     * Тест на регистрацию чека "Возврат Прихода" и проверку статуса его регистрации
+     */
+    @Test
+    public void testRegisterRefundDebit() throws TException {
+        register(Type.refund_debit(new RefundDebit()));
+    }
+
+    private void register(Type type) throws TException {
+        CashRegContext cashRegContextCreated = makeCashRegContext(type);
         // Регистрация чека
         CashRegResult result = handler.register(cashRegContextCreated);
         assertTrue(result.getIntent().isSetSleep());
 
         // Сохранение состояния из предыдущего результата
-        CashRegContext cashRegContextFinished = makeCashRegContext();
+        CashRegContext cashRegContextFinished = makeCashRegContext(type);
         cashRegContextFinished.getSession().setState(result.getState());
 
         // Запрос финального статуса

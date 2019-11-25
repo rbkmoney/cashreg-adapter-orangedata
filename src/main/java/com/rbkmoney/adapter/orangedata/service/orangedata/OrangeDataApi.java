@@ -70,7 +70,7 @@ public class OrangeDataApi {
 
     private HttpHeaders getHttpHeaders(String signature) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set(HeaderField.SIGNATURE, signature);
+        headers.set(HeaderField.SIGNATURE.getValue(), signature);
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.setAcceptCharset(Arrays.asList(StandardCharsets.UTF_8));
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);

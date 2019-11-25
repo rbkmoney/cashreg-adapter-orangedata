@@ -1,9 +1,14 @@
 package com.rbkmoney.adapter.orangedata.service.orangedata.constant;
 
 import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Group {
-    public static final String DEFAULT = "Main";
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public enum Group {
+
+    DEFAULT("Main");
+
+    private final String value;
 }

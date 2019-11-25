@@ -40,21 +40,11 @@ public class ExitModelToProxyResultConverter implements Converter<ExitStateModel
             adapterState.setMaxDateTimePolling(maxDateTime);
         }
 
-        Intent intent = CashRegProviderCreators.createFinishIntentSuccess();
-        if (exitStateModel.getErrorCode() != null) {
-            Failure failure = errorMapping.mapFailure(exitStateModel.getErrorCode(), exitStateModel.getErrorMessage());
-            intent = CashRegProviderCreators.createFinishIntentFailure(failure);
-        }
-
-        if (exitStateModel.getCashRegInfo() == null) {
-            Map<String, String> options = entryStateModel.getOptions();
-            intent = CashRegProviderCreators.createIntentWithSleepIntent(extractPollingDelay(options, timerProperties.getPollingDelay()));
-        }
-
         if (Step.CREATE == adapterState.getNextStep()) {
             adapterState.setNextStep(Step.CHECK_STATUS);
         }
 
+        Intent intent = prepareIntent(exitStateModel, entryStateModel);
         CashRegResult cashRegResult = new CashRegResult()
                 .setIntent(intent)
                 .setState(serializer.writeByte(adapterState));
@@ -64,6 +54,18 @@ public class ExitModelToProxyResultConverter implements Converter<ExitStateModel
             cashRegResult.setCashregInfo(exitStateModel.getCashRegInfo());
         }
         return cashRegResult;
+    }
+
+    private Intent prepareIntent(ExitStateModel exitStateModel, EntryStateModel entryStateModel) {
+        if (exitStateModel.getErrorCode() != null) {
+            Failure failure = errorMapping.mapFailure(exitStateModel.getErrorCode(), exitStateModel.getErrorMessage());
+            return CashRegProviderCreators.createFinishIntentFailure(failure);
+        } else if (exitStateModel.getCashRegInfo() == null) {
+            Map<String, String> options = entryStateModel.getOptions();
+            return CashRegProviderCreators.createIntentWithSleepIntent(extractPollingDelay(options, timerProperties.getPollingDelay()));
+        } else {
+            return CashRegProviderCreators.createFinishIntentSuccess();
+        }
     }
 
 }

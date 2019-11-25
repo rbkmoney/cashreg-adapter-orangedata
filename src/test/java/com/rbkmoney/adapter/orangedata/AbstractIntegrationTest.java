@@ -7,7 +7,6 @@ import com.rbkmoney.damsel.cashreg.provider.CashRegContext;
 import com.rbkmoney.damsel.cashreg.provider.CashRegProviderSrv;
 import com.rbkmoney.damsel.cashreg.provider.Session;
 import com.rbkmoney.damsel.cashreg.provider.SourceCreation;
-import com.rbkmoney.damsel.cashreg.type.Debit;
 import com.rbkmoney.damsel.cashreg.type.Type;
 import com.rbkmoney.damsel.cashreg_domain.AccountInfo;
 import com.rbkmoney.damsel.cashreg_domain.PaymentInfo;
@@ -39,13 +38,13 @@ public abstract class AbstractIntegrationTest {
     @Autowired
     protected CashRegProviderSrv.Iface handler;
 
-    public CashRegContext makeCashRegContext() {
+    public CashRegContext makeCashRegContext(Type type) {
         CashRegContext context = new CashRegContext();
         context.setCashregId(TestData.CASHREG_ID);
         context.setSourceCreation(createSourceCreation());
         context.setAccountInfo(createAccountInfo());
         context.setOptions(createAdapterOptions());
-        context.setSession(new Session().setType(Type.debit(new Debit())));
+        context.setSession(new Session().setType(type));
         return context;
     }
 

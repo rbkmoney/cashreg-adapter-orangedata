@@ -14,25 +14,25 @@ public class OrangeDataClient implements AdapterCashReg {
 
     @Override
     public ResponseEntity<Response> debit(RequestWrapper<Request> requestWrapper) {
-        requestWrapper.getRequest().getContent().setType(DocumentType.INCOME);
+        requestWrapper.getRequest().getContent().setType(DocumentType.INCOME.getType());
         return api.create(requestWrapper);
     }
 
     @Override
     public ResponseEntity<Response> credit(RequestWrapper<Request> requestWrapper) {
-        requestWrapper.getRequest().getContent().setType(DocumentType.INCOME_REFUND);
+        requestWrapper.getRequest().getContent().setType(DocumentType.INCOME_REFUND.getType());
         return api.create(requestWrapper);
     }
 
     @Override
     public ResponseEntity<Response> refundDebit(RequestWrapper<Request> requestWrapper) {
-        requestWrapper.getRequest().getContent().setType(DocumentType.COST);
+        requestWrapper.getRequest().getContent().setType(DocumentType.COST.getType());
         return api.create(requestWrapper);
     }
 
     @Override
     public ResponseEntity<Response> refundCredit(RequestWrapper<Request> requestWrapper) {
-        requestWrapper.getRequest().getContent().setType(DocumentType.COST_REFUND);
+        requestWrapper.getRequest().getContent().setType(DocumentType.COST_REFUND.getType());
         return api.create(requestWrapper);
     }
 

@@ -1,7 +1,8 @@
 package com.rbkmoney.adapter.orangedata.service.orangedata.constant;
 
 import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Признак агента, 1057. Битовое поле, где номер бита обозначает,
@@ -12,13 +13,17 @@ import lombok.NoArgsConstructor;
  * содержит реквизит «признак агента» (тег 1057), имеющий значение,
  * идентичное значению реквизита «признак агента» (тег 1057) кассового чека.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class AgentType {
-    public static final Integer BANK_PAYING_AGENT = 0;
-    public static final Integer BANK_PAYMENT_SUBAGENT = 1;
-    public static final Integer PAYMENT_AGENT = 2;
-    public static final Integer PAYMENT_SUBAGENT = 3;
-    public static final Integer ATTORNEY = 4;
-    public static final Integer COMMISSION_AGENT = 5;
-    public static final Integer OTHER_AGENT = 6;
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public enum AgentType {
+
+    BANK_PAYING_AGENT(0),
+    BANK_PAYMENT_SUBAGENT(1),
+    PAYMENT_AGENT(2),
+    PAYMENT_SUBAGENT(3),
+    ATTORNEY(4),
+    COMMISSION_AGENT(5),
+    OTHER_AGENT(6);
+
+    private final Integer type;
 }

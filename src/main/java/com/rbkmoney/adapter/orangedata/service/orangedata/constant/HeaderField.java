@@ -1,9 +1,15 @@
 package com.rbkmoney.adapter.orangedata.service.orangedata.constant;
 
 import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class HeaderField {
-    public static final String SIGNATURE = "X-Signature";
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public enum  HeaderField {
+
+    SIGNATURE("X-Signature");
+
+    private final String value;
+
 }

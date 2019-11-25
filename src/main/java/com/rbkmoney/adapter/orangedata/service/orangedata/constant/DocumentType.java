@@ -1,18 +1,25 @@
 package com.rbkmoney.adapter.orangedata.service.orangedata.constant;
 
 import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class DocumentType {
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public enum DocumentType {
 
-    //Приход
-    public static final int INCOME = 1;
-    //Возврат прихода
-    public static final int INCOME_REFUND = 2;
+    // Приход
+    INCOME(1),
+
+    // Возврат прихода
+    INCOME_REFUND(2),
+
     //Расход
-    public static final int COST = 3;
-    //Возврат расхода
-    public static final int COST_REFUND = 4;
+    COST(3),
+
+    // Возврат расхода
+    COST_REFUND(4);
+
+    private final Integer type;
 
 }

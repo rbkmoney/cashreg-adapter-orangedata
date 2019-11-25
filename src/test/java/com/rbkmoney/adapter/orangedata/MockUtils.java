@@ -27,6 +27,24 @@ public class MockUtils {
                 .debit(any());
 
         doAnswer((Answer<ResponseEntity<Response>>) invocation -> ResponseEntity
+                .status(org.apache.http.HttpStatus.SC_CREATED)
+                .body(response))
+                .when(client)
+                .credit(any());
+
+        doAnswer((Answer<ResponseEntity<Response>>) invocation -> ResponseEntity
+                .status(org.apache.http.HttpStatus.SC_CREATED)
+                .body(response))
+                .when(client)
+                .refundCredit(any());
+
+        doAnswer((Answer<ResponseEntity<Response>>) invocation -> ResponseEntity
+                .status(org.apache.http.HttpStatus.SC_CREATED)
+                .body(response))
+                .when(client)
+                .refundDebit(any());
+
+        doAnswer((Answer<ResponseEntity<Response>>) invocation -> ResponseEntity
                 .status(org.apache.http.HttpStatus.SC_OK)
                 .body(response))
                 .when(client)

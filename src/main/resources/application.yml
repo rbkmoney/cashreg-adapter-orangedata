@@ -27,9 +27,9 @@ converterIp:
   nat64prefix: "2a04:4a00:5:10ff:4:1:"
 ---
 restTemplate:
-  requestTimeout: 60000
-  poolTimeout: 10000
-  connectionTimeout: 10000
+  requestTimeout: 5000
+  poolTimeout: 5000
+  connectionTimeout: 5000
   maxTotalPooling: 200
   defaultMaxPerRoute: 200
 ---

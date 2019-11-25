@@ -34,8 +34,9 @@ public class ExitModelToProxyResultConverterTest extends AbstractIntegrationTest
                 .entryStateModel(entryStateModel)
                 .build();
 
+        // Проверка, что без состояния вернется поллинг статуса
         CashRegResult regResult = exitConverter.convert(exitStateModel);
-        assertTrue("Проверка, что без состояния вернется поллинг статуса", regResult.getIntent().isSetSleep());
+        assertTrue("CashRegResult status of a intent isn't sleep", regResult.getIntent().isSetSleep());
 
         ExitStateModel exitStateModelFailure = ExitStateModel.builder()
                 .adapterContext(new AdapterState())
@@ -45,8 +46,9 @@ public class ExitModelToProxyResultConverterTest extends AbstractIntegrationTest
                 .errorMessage("message")
                 .build();
 
+        // Проверка, что без состояния вернется поллинг статуса
         CashRegResult regResultFailure = exitConverter.convert(exitStateModelFailure);
-        assertTrue("Проверка, что без состояния вернется поллинг статуса", regResultFailure.getIntent().getFinish().getStatus().isSetFailure());
+        assertTrue("CashRegResult status of a intent isn't failure", regResultFailure.getIntent().getFinish().getStatus().isSetFailure());
     }
 
 }

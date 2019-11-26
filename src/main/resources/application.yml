@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: @name@
+    description: @description@
+---
+info:
+  version: @version@
+  responsible: Anatoly Cherkasov
+  stage: dev
+---
+management:
+  metrics:
+    export:
+      statsd:
+        flavor: etsy
+        enabled: false
+---
+keystore:
+  type: pkcs12
+  password: 12345
+  certificate: file:/opt/java/starrys/ssl/orangedata.p12
+---
+server:
+  port: @server.port@
+---
+converterIp:
+  nat64prefix: "2a04:4a00:5:10ff:4:1:"
+---
+restTemplate:
+  requestTimeout: 5000
+  poolTimeout: 5000
+  connectionTimeout: 5000
+  maxTotalPooling: 200
+  defaultMaxPerRoute: 200
+---
+adapter-cashreg:
+  url: "https://apip.orangedata.ru:2443/api/v2/"
+---
+timer:
+  maxTimePolling: 600
+  pollingDelay: 600
+---
+error-mapping:
+  file: classpath:fixture/errors.json
+  patternReason: "'%s' - '%s'" # 'code' - 'description'

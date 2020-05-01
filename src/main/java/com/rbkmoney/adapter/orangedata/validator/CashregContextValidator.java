@@ -2,7 +2,7 @@ package com.rbkmoney.adapter.orangedata.validator;
 
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.constant.OptionalField;
 import com.rbkmoney.adapter.common.Validator;
-import com.rbkmoney.damsel.cashreg.provider.CashRegContext;
+import com.rbkmoney.damsel.cashreg.adapter.CashregContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +11,10 @@ import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class CashRegContextValidator implements Validator<CashRegContext> {
+public class CashregContextValidator implements Validator<CashregContext> {
 
     @Override
-    public void validate(CashRegContext context) {
+    public void validate(CashregContext context) {
         Map<String, String> options = context.getOptions();
         validateRequiredFields(options);
     }

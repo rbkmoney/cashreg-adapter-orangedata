@@ -6,8 +6,8 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 
 @ServletComponentScan
 @SpringBootApplication
-public class CashRegOrangeDataApplication extends SpringApplication {
+public class CashregOrangeDataApplication extends SpringApplication {
     public static void main(String[] args) {
-        SpringApplication.run(CashRegOrangeDataApplication.class, args);
+        SpringApplication.run(CashregOrangeDataApplication.class, args);
     }
 }

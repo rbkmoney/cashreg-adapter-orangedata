@@ -1,16 +1,16 @@
 package com.rbkmoney.adapter.orangedata;
 
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.constant.OptionalField;
-import com.rbkmoney.damsel.cashreg.Cart;
-import com.rbkmoney.damsel.cashreg.ItemsLine;
-import com.rbkmoney.damsel.cashreg.provider.CashRegContext;
-import com.rbkmoney.damsel.cashreg.provider.CashRegProviderSrv;
-import com.rbkmoney.damsel.cashreg.provider.Session;
-import com.rbkmoney.damsel.cashreg.provider.SourceCreation;
-import com.rbkmoney.damsel.cashreg.type.Type;
-import com.rbkmoney.damsel.cashreg_domain.AccountInfo;
-import com.rbkmoney.damsel.cashreg_domain.PaymentInfo;
-import com.rbkmoney.damsel.cashreg_domain.TaxMode;
+import com.rbkmoney.damsel.cashreg.adapter.CashregAdapterSrv;
+import com.rbkmoney.damsel.cashreg.adapter.CashregContext;
+import com.rbkmoney.damsel.cashreg.adapter.Session;
+import com.rbkmoney.damsel.cashreg.adapter.SourceCreation;
+import com.rbkmoney.damsel.cashreg.domain.AccountInfo;
+import com.rbkmoney.damsel.cashreg.domain.PaymentInfo;
+import com.rbkmoney.damsel.cashreg.domain.TaxMode;
+import com.rbkmoney.damsel.cashreg.receipt.Cart;
+import com.rbkmoney.damsel.cashreg.receipt.ItemsLine;
+import com.rbkmoney.damsel.cashreg.receipt.type.Type;
 import com.rbkmoney.damsel.domain.Cash;
 import com.rbkmoney.damsel.domain.CurrencyRef;
 import lombok.extern.slf4j.Slf4j;
@@ -33,14 +33,14 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
         "keystore.certificate=classpath:ssl/orangedata.p12",
         "adapter-cashreg.url=http://localhost:9999/api/v2/",
 })
-@ContextConfiguration(classes = CashRegOrangeDataApplication.class)
+@ContextConfiguration(classes = CashregOrangeDataApplication.class)
 public abstract class AbstractIntegrationTest {
 
     @Autowired
-    protected CashRegProviderSrv.Iface handler;
+    protected CashregAdapterSrv.Iface handler;
 
-    public CashRegContext makeCashRegContext(Type type) {
-        CashRegContext context = new CashRegContext();
+    public CashregContext makeCashRegContext(Type type) {
+        CashregContext context = new CashregContext();
         context.setCashregId(TestData.CASHREG_ID);
         context.setSourceCreation(createSourceCreation());
         context.setAccountInfo(createAccountInfo());
@@ -70,8 +70,8 @@ public abstract class AbstractIntegrationTest {
     }
 
     protected AccountInfo createAccountInfo() {
-        com.rbkmoney.damsel.cashreg_domain.LegalEntity legalEntity = new com.rbkmoney.damsel.cashreg_domain.LegalEntity();
-        com.rbkmoney.damsel.cashreg_domain.RussianLegalEntity russianLegalEntity = new com.rbkmoney.damsel.cashreg_domain.RussianLegalEntity();
+        com.rbkmoney.damsel.cashreg.domain.LegalEntity legalEntity = new com.rbkmoney.damsel.cashreg.domain.LegalEntity();
+        com.rbkmoney.damsel.cashreg.domain.RussianLegalEntity russianLegalEntity = new com.rbkmoney.damsel.cashreg.domain.RussianLegalEntity();
 
         russianLegalEntity.setActualAddress("ActualAddress");
         russianLegalEntity.setInn("INN");
@@ -82,7 +82,7 @@ public abstract class AbstractIntegrationTest {
         russianLegalEntity.setRepresentativePosition("RepresentativePosition");
         russianLegalEntity.setRegisteredNumber("RegisteredNumber");
 
-        com.rbkmoney.damsel.cashreg_domain.RussianBankAccount russianBankAccount = new com.rbkmoney.damsel.cashreg_domain.RussianBankAccount();
+        com.rbkmoney.damsel.cashreg.domain.RussianBankAccount russianBankAccount = new com.rbkmoney.damsel.cashreg.domain.RussianBankAccount();
         russianBankAccount.setAccount("Account");
         russianBankAccount.setBankName("BankName");
         russianBankAccount.setBankPostAccount("BankPostAccount");

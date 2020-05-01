@@ -9,10 +9,10 @@ import com.rbkmoney.adapter.common.Validator;
 import com.rbkmoney.adapter.orangedata.converter.entry.CtxToEntryModelConverter;
 import com.rbkmoney.adapter.orangedata.converter.exit.ExitModelToProxyResultConverter;
 import com.rbkmoney.adapter.orangedata.service.orangedata.model.Response;
-import com.rbkmoney.adapter.orangedata.validator.CashRegContextValidator;
-import com.rbkmoney.damsel.cashreg.provider.CashRegContext;
-import com.rbkmoney.damsel.cashreg.provider.CashRegProviderSrv;
-import com.rbkmoney.damsel.cashreg.provider.CashRegResult;
+import com.rbkmoney.adapter.orangedata.validator.CashregContextValidator;
+import com.rbkmoney.damsel.cashreg.adapter.CashregAdapterSrv;
+import com.rbkmoney.damsel.cashreg.adapter.CashregContext;
+import com.rbkmoney.damsel.cashreg.adapter.CashregResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
@@ -27,18 +27,18 @@ import java.util.List;
 @Primary
 @Component
 @RequiredArgsConstructor
-public class OrangeDataServerHandler implements CashRegProviderSrv.Iface {
+public class OrangeDataServerHandler implements CashregAdapterSrv.Iface {
 
     private final CtxToEntryModelConverter ctxToEntryModelConverter;
     private final ExitModelToProxyResultConverter exitModelToProxyResultConverter;
     private final StepResolver stepResolver;
-    private final CashRegContextValidator cashRegContextValidator;
+    private final CashregContextValidator cashregContextValidator;
     private final List<CommonHandler<ExitStateModel, ResponseEntity<Response>, EntryStateModel>> handlers;
 
     @Override
-    public CashRegResult register(CashRegContext context) throws TException {
+    public CashregResult register(CashregContext context) throws TException {
         return handle(
-                cashRegContextValidator,
+                cashregContextValidator,
                 ctxToEntryModelConverter,
                 exitModelToProxyResultConverter,
                 context

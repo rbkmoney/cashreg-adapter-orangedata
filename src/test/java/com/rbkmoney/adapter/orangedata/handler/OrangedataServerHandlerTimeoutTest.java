@@ -2,8 +2,8 @@ package com.rbkmoney.adapter.orangedata.handler;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.rbkmoney.adapter.orangedata.AbstractIntegrationTest;
-import com.rbkmoney.damsel.cashreg.type.Debit;
-import com.rbkmoney.damsel.cashreg.type.Type;
+import com.rbkmoney.damsel.cashreg.receipt.type.Debit;
+import com.rbkmoney.damsel.cashreg.receipt.type.Type;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
 import org.junit.Before;

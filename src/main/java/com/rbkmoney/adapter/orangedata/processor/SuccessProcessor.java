@@ -7,7 +7,7 @@ import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.Step;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.processor.Processor;
 import com.rbkmoney.adapter.orangedata.service.orangedata.model.Response;
 import com.rbkmoney.adapter.orangedata.utils.ErrorUtils;
-import com.rbkmoney.damsel.cashreg.CashRegInfo;
+import com.rbkmoney.damsel.cashreg.receipt.ReceiptInfo;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,18 +26,20 @@ public class SuccessProcessor implements Processor<ExitStateModel, EntryStateMod
             AdapterState adapterState = entryStateModel.getState().getAdapterContext();
             Response response = responseEntity.getBody();
             adapterState.setReceiptId(response.getId());
-            adapterState.setCashRegId(entryStateModel.getCashRegId());
+            adapterState.setCashregId(entryStateModel.getCashRegId());
 
             if (Step.CHECK_STATUS.equals(entryStateModel.getState().getAdapterContext().getNextStep())
                     && isDelivered(responseEntity)) {
-                exitStateModel.setCashRegInfo(new CashRegInfo()
+
+                ReceiptInfo receiptInfo = new ReceiptInfo()
                         .setReceiptId(response.getId())
                         .setTotal(entryStateModel.getTotal().toString())
                         .setFiscalDocumentNumber(response.getFsNumber())
                         .setDeviceCode(response.getDeviceRN())
                         .setFnsSite(response.getFnsWebsite())
                         .setShiftNumber(response.getShiftNumber().toString())
-                        .setTimestamp(response.getProcessedAt()));
+                        .setTimestamp(response.getProcessedAt());
+                exitStateModel.setInfo(receiptInfo);
             } else if (Step.CREATE.equals(entryStateModel.getState().getAdapterContext().getNextStep())) {
                 adapterState.setNextStep(Step.CHECK_STATUS);
             }

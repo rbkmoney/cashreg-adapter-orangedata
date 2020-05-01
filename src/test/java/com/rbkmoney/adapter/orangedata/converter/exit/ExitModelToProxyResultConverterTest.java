@@ -6,9 +6,9 @@ import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.ExitStateModel;
 import com.rbkmoney.adapter.orangedata.AbstractIntegrationTest;
 import com.rbkmoney.adapter.orangedata.TestData;
 import com.rbkmoney.adapter.orangedata.converter.entry.CtxToEntryModelConverter;
-import com.rbkmoney.damsel.cashreg.provider.CashRegResult;
-import com.rbkmoney.damsel.cashreg.type.Debit;
-import com.rbkmoney.damsel.cashreg.type.Type;
+import com.rbkmoney.damsel.cashreg.adapter.CashregResult;
+import com.rbkmoney.damsel.cashreg.receipt.type.Debit;
+import com.rbkmoney.damsel.cashreg.receipt.type.Type;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
@@ -30,24 +30,24 @@ public class ExitModelToProxyResultConverterTest extends AbstractIntegrationTest
         EntryStateModel entryStateModel = ctxConverter.convert(makeCashRegContext(Type.debit(new Debit())));
         ExitStateModel exitStateModel = ExitStateModel.builder()
                 .adapterContext(new AdapterState())
-                .cashRegId(TestData.CASHREG_ID)
+                .receiptId(TestData.CASHREG_ID)
                 .entryStateModel(entryStateModel)
                 .build();
 
         // Проверка, что без состояния вернется поллинг статуса
-        CashRegResult regResult = exitConverter.convert(exitStateModel);
+        CashregResult regResult = exitConverter.convert(exitStateModel);
         assertTrue("CashRegResult status of a intent isn't sleep", regResult.getIntent().isSetSleep());
 
         ExitStateModel exitStateModelFailure = ExitStateModel.builder()
                 .adapterContext(new AdapterState())
-                .cashRegId(TestData.CASHREG_ID)
+                .receiptId(TestData.CASHREG_ID)
                 .entryStateModel(entryStateModel)
                 .errorCode("code")
                 .errorMessage("message")
                 .build();
 
         // Проверка, что без состояния вернется поллинг статуса
-        CashRegResult regResultFailure = exitConverter.convert(exitStateModelFailure);
+        CashregResult regResultFailure = exitConverter.convert(exitStateModelFailure);
         assertTrue("CashRegResult status of a intent isn't failure", regResultFailure.getIntent().getFinish().getStatus().isSetFailure());
     }
 

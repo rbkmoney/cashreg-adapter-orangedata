@@ -1,0 +1,7 @@
+[
+  {
+    "codeRegex":".*",
+    "descriptionRegex":".*",
+    "mapping":"authorization_failed:unknown"
+  }
+]

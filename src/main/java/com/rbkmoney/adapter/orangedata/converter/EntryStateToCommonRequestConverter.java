@@ -1,6 +1,6 @@
 package com.rbkmoney.adapter.orangedata.converter;
 
-import com.rbkmoney.adapter.cashreg.spring.boot.starter.config.properties.AdapterCashRegProperties;
+import com.rbkmoney.adapter.cashreg.spring.boot.starter.config.properties.AdapterCashregProperties;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.constant.OptionalField;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.EntryStateModel;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.Items;
@@ -8,7 +8,7 @@ import com.rbkmoney.adapter.orangedata.service.orangedata.constant.PaymentType;
 import com.rbkmoney.adapter.orangedata.service.orangedata.constant.TaxationSystem;
 import com.rbkmoney.adapter.orangedata.service.orangedata.constant.Vat;
 import com.rbkmoney.adapter.orangedata.service.orangedata.model.*;
-import com.rbkmoney.damsel.cashreg_domain.TaxMode;
+import com.rbkmoney.damsel.cashreg.domain.TaxMode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ import static com.rbkmoney.adapter.orangedata.service.orangedata.constant.Option
 @RequiredArgsConstructor
 public class EntryStateToCommonRequestConverter implements Converter<EntryStateModel, RequestWrapper<Request>> {
 
-    private final AdapterCashRegProperties adapterCashRegProperties;
+    private final AdapterCashregProperties adapterCashregProperties;
 
     @Override
     public RequestWrapper<Request> convert(EntryStateModel entryStateModel) {
@@ -54,7 +54,7 @@ public class EntryStateToCommonRequestConverter implements Converter<EntryStateM
         request.setContent(content);
         return new RequestWrapper<>(
                 request,
-                options.getOrDefault(OptionalField.URL.getField(), adapterCashRegProperties.getUrl()),
+                options.getOrDefault(OptionalField.URL.getField(), adapterCashregProperties.getUrl()),
                 options.get(OptionalField.GROUP.getField()),
                 options.get(OptionalField.COMPANY_NAME.getField()),
                 options.get(OptionalField.COMPANY_ADDRESS.getField()),

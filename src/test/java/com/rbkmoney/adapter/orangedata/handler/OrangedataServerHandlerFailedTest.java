@@ -3,9 +3,9 @@ package com.rbkmoney.adapter.orangedata.handler;
 import com.rbkmoney.adapter.orangedata.AbstractIntegrationTest;
 import com.rbkmoney.adapter.orangedata.MockUtils;
 import com.rbkmoney.adapter.orangedata.service.orangedata.OrangeDataClient;
-import com.rbkmoney.damsel.cashreg.provider.CashRegContext;
-import com.rbkmoney.damsel.cashreg.provider.CashRegResult;
-import com.rbkmoney.damsel.cashreg.type.*;
+import com.rbkmoney.damsel.cashreg.adapter.CashregContext;
+import com.rbkmoney.damsel.cashreg.adapter.CashregResult;
+import com.rbkmoney.damsel.cashreg.receipt.type.*;
 import org.apache.thrift.TException;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class OrangedataServerHandlerFailedTest extends AbstractIntegrationTest {
@@ -43,13 +43,13 @@ public class OrangedataServerHandlerFailedTest extends AbstractIntegrationTest {
     }
 
     private void register(Type type) throws TException {
-        CashRegContext cashRegContextCreated = makeCashRegContext(type);
+        CashregContext cashRegContextCreated = makeCashRegContext(type);
         // Регистрация чека
-        CashRegResult result = handler.register(cashRegContextCreated);
+        CashregResult result = handler.register(cashRegContextCreated);
         assertTrue("Current status of a intent isn't sleep", result.getIntent().isSetSleep());
 
         // Сохранение состояния из предыдущего результата
-        CashRegContext cashRegContextFinished = makeCashRegContext(type);
+        CashregContext cashRegContextFinished = makeCashRegContext(type);
         cashRegContextFinished.getSession().setState(result.getState());
 
         // Запрос финального статуса

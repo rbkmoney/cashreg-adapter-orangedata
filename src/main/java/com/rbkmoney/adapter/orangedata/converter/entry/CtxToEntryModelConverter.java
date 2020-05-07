@@ -1,15 +1,15 @@
 package com.rbkmoney.adapter.orangedata.converter.entry;
 
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.constant.OptionalField;
-import com.rbkmoney.adapter.cashreg.spring.boot.starter.converter.CashRegAdapterContextConverter;
+import com.rbkmoney.adapter.cashreg.spring.boot.starter.converter.CashregAdapterContextConverter;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.flow.TargetTypeResolver;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.*;
-import com.rbkmoney.damsel.cashreg.Cart;
-import com.rbkmoney.damsel.cashreg.ItemsLine;
-import com.rbkmoney.damsel.cashreg.provider.CashRegContext;
-import com.rbkmoney.damsel.cashreg_domain.PaymentInfo;
-import com.rbkmoney.damsel.cashreg_domain.RussianLegalEntity;
-import com.rbkmoney.damsel.cashreg_domain.TaxMode;
+import com.rbkmoney.damsel.cashreg.adapter.CashregContext;
+import com.rbkmoney.damsel.cashreg.domain.PaymentInfo;
+import com.rbkmoney.damsel.cashreg.domain.RussianLegalEntity;
+import com.rbkmoney.damsel.cashreg.domain.TaxMode;
+import com.rbkmoney.damsel.cashreg.receipt.Cart;
+import com.rbkmoney.damsel.cashreg.receipt.ItemsLine;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class CtxToEntryModelConverter implements Converter<CashRegContext, EntryStateModel> {
+public class CtxToEntryModelConverter implements Converter<CashregContext, EntryStateModel> {
 
-    private final CashRegAdapterContextConverter cashRegAdapterContextConveter;
+    private final CashregAdapterContextConverter cashregAdapterContextConveter;
 
     @Override
-    public EntryStateModel convert(CashRegContext context) {
+    public EntryStateModel convert(CashregContext context) {
         Map<String, String> options = context.getOptions();
         PaymentInfo paymentInfo = context.getSourceCreation().getPayment();
         RussianLegalEntity russianLegalEntity = context.getAccountInfo().getLegalEntity().getRussianLegalEntity();
@@ -38,7 +38,7 @@ public class CtxToEntryModelConverter implements Converter<CashRegContext, Entry
         List<Vat> vats = itemsLines.stream()
                 .map(this::prepareVat)
                 .collect(Collectors.toList());
-        AdapterState adapterState = cashRegAdapterContextConveter.convert(context);
+        AdapterState adapterState = cashregAdapterContextConveter.convert(context);
 
         return EntryStateModel.builder()
                 .options(context.getOptions())

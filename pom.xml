@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.rbkmoney</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.1.RELEASE</version>
+        <version>2.3.2.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -28,21 +28,25 @@
         <dockerfile.Template>GENERATED DOCKER FILE</dockerfile.Template>
         <dockerfile.base.service.tag>bc95d0d6dc13c693acd2b274531a7d604b877bf3</dockerfile.base.service.tag>
         <dockerfile.registry>dr2.rbkmoney.com</dockerfile.registry>
-        <shared.resources.version>0.3.6</shared.resources.version>
+        <shared.resources.version>0.3.8</shared.resources.version>
         <logstash-logback-encoder.version>5.2</logstash-logback-encoder.version>
-        <geck.version>0.6.9</geck.version>
+        <woody.version>[1.1.21,)</woody.version>
+        <geck.version>0.6.11</geck.version>
         <lombok.version>1.18.4</lombok.version>
-        <error-mapping.version>1.0.5</error-mapping.version>
-        <cashreg-proto.version>1.14-25a9f63</cashreg-proto.version>
-        <adapter-common-lib.version>0.0.23</adapter-common-lib.version>
+        <error-mapping.version>1.0.6</error-mapping.version>
+        <cashreg-proto.version>1.15-f4f228b</cashreg-proto.version>
+        <adapter-common-lib.version>0.0.26</adapter-common-lib.version>
         <testcontainers.version>1.10.2</testcontainers.version>
+        <adapter-cashreg-spring-boot-starter.version>1.0.2</adapter-cashreg-spring-boot-starter.version>
+        <spring-boot-starter-metrics-statsd.version>1.1.2</spring-boot-starter-metrics-statsd.version>
+        <hibernate-validator.version>6.1.5.Final</hibernate-validator.version>
+        <ipaddress.version>5.0.1</ipaddress.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <adapter-bank-spring-boot-starter-test.version>0.0.1-SNAPSHOT</adapter-bank-spring-boot-starter-test.version>
     </properties>
 
     <dependencies>
-        <!--Thrirdparty libs-->
+        <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -52,35 +56,15 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>${httpclient.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-            <version>${logstash-logback-encoder.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.seancfoley</groupId>
-            <artifactId>ipaddress</artifactId>
-            <version>4.2.0</version>
-        </dependency>
-        <!--RBK libs-->
+        <!-- RBK.Money -->
         <dependency>
             <groupId>com.rbkmoney</groupId>
             <artifactId>adapter-cashreg-spring-boot-starter</artifactId>
-            <version>1.0.1</version>
+            <version>${adapter-cashreg-spring-boot-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>com.rbkmoney</groupId>
@@ -89,18 +73,18 @@
         </dependency>
         <dependency>
             <groupId>com.rbkmoney</groupId>
-            <artifactId>spring-boot-starter-metrics-statsd</artifactId>
-            <version>1.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.rbkmoney</groupId>
             <artifactId>error-mapping-java</artifactId>
             <version>${error-mapping.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.rbkmoney</groupId>
+            <artifactId>spring-boot-starter-metrics-statsd</artifactId>
+            <version>${spring-boot-starter-metrics-statsd.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.rbkmoney.woody</groupId>
             <artifactId>woody-thrift</artifactId>
-            <version>1.1.16</version>
+            <version>${woody.version}</version>
         </dependency>
         <dependency>
             <groupId>com.rbkmoney</groupId>
@@ -121,16 +105,35 @@
         <dependency>
             <groupId>com.rbkmoney.geck</groupId>
             <artifactId>serializer</artifactId>
-            <version>0.6.7</version>
+            <version>${geck.version}</version>
         </dependency>
-
-        <!--Test libs-->
+        <!--Third party libs-->
         <dependency>
-            <groupId>com.rbkmoney</groupId>
-            <artifactId>adapter-bank-spring-boot-starter-test</artifactId>
-            <version>${adapter-bank-spring-boot-starter-test.version}</version>
-            <scope>test</scope>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.seancfoley</groupId>
+            <artifactId>ipaddress</artifactId>
+            <version>${ipaddress.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback-encoder.version}</version>
+        </dependency>
+        <!--Test libs-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

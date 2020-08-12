@@ -12,5 +12,5 @@ build('cashreg-adapter-orangedata', 'java-maven') {
     def mvnArgs = '-DjvmArgs="-Xmx256m"'
     def useJava11 = true
 
-    javaServicePipeline(serviceName, useJava11, mvnArgs, registry, registryCredsId)
+    javaServicePipeline(serviceName, useJava11, mvnArgs)
 }

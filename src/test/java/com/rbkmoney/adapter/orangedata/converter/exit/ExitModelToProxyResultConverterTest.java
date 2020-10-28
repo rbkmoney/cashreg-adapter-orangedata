@@ -3,6 +3,7 @@ package com.rbkmoney.adapter.orangedata.converter.exit;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.AdapterState;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.EntryStateModel;
 import com.rbkmoney.adapter.cashreg.spring.boot.starter.model.ExitStateModel;
+import com.rbkmoney.adapter.common.model.PollingInfo;
 import com.rbkmoney.adapter.orangedata.AbstractIntegrationTest;
 import com.rbkmoney.adapter.orangedata.TestData;
 import com.rbkmoney.adapter.orangedata.converter.entry.CtxToEntryModelConverter;
@@ -12,6 +13,9 @@ import com.rbkmoney.damsel.cashreg.receipt.type.Type;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 import static org.junit.Assert.assertTrue;
 
@@ -28,8 +32,15 @@ public class ExitModelToProxyResultConverterTest extends AbstractIntegrationTest
     @Test
     public void testExitModelToProxyResultConverter() {
         EntryStateModel entryStateModel = ctxConverter.convert(makeCashRegContext(Type.debit(new Debit())));
+        AdapterState adapterState = new AdapterState();
+
+        PollingInfo pollingInfo = new PollingInfo();
+        pollingInfo.setStartDateTimePolling(Instant.now());
+        pollingInfo.setMaxDateTimePolling(Instant.now().plus(2, ChronoUnit.HOURS));
+        adapterState.setPollingInfo(pollingInfo);
+
         ExitStateModel exitStateModel = ExitStateModel.builder()
-                .adapterContext(new AdapterState())
+                .adapterContext(adapterState)
                 .receiptId(TestData.CASHREG_ID)
                 .entryStateModel(entryStateModel)
                 .build();

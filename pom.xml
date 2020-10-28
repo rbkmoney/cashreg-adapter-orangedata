@@ -19,13 +19,13 @@
     <description>Application to interact with adapters kkt</description>
 
     <properties>
+        <java.version>11</java.version>
         <server.port>8022</server.port>
         <stage>dev</stage>
         <exposed.ports>${server.port}</exposed.ports>
         <project.maintainer>Anatoly Cherkasov &lt;a.cherkasov@rbkmoney.com&gt;</project.maintainer>
-        <dockerfile.Template>GENERATED DOCKER FILE</dockerfile.Template>
         <dockerfile.base.service.tag>57e26d8ee999d7b0b50248c22afc63e6f926d276</dockerfile.base.service.tag>
-        <dockerfile.registry>dr2.rbkmoney.com</dockerfile.registry>
+        <dockerfile.registry>${env.REGISTRY}</dockerfile.registry>
         <shared.resources.version>0.3.8</shared.resources.version>
         <logstash-logback-encoder.version>5.2</logstash-logback-encoder.version>
         <woody.version>[1.1.21,)</woody.version>
@@ -185,7 +185,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-remote-resources-plugin</artifactId>
-                <version>1.5</version>
+                <version>1.6.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.shared</groupId>

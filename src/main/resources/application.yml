@@ -36,9 +36,10 @@ restTemplate:
 adapter-cashreg:
   url: "https://apip.orangedata.ru:2443/api/v2/"
 ---
-timer:
-  maxTimePolling: 600
-  pollingDelay: 600
+time:
+  config:
+    maxTimePolling: 600
+    pollingDelay: 600
 ---
 error-mapping:
   file: classpath:fixture/errors.json

@@ -34,7 +34,7 @@ public class ErrorProcessor implements Processor<ExitStateModel, EntryStateModel
         if (ErrorUtils.hasError(responseEntity)) {
             exitStateModel.setErrorCode(responseEntity.getStatusCode().toString());
             exitStateModel.setErrorMessage(responseEntity.getStatusCode().getReasonPhrase());
-        } else if (adapterState.getMaxDateTimePolling().getEpochSecond() < currentTime.getEpochSecond()) {
+        } else if (adapterState.getPollingInfo().getMaxDateTimePolling().getEpochSecond() < currentTime.getEpochSecond()) {
             log.error("Sleep Timeout for response: {}!", responseEntity);
             exitStateModel.setErrorCode(SLEEP_TIMEOUT.getCode());
             exitStateModel.setErrorMessage(SLEEP_TIMEOUT.getMessage());

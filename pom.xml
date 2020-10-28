@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.rbkmoney</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.2.RELEASE</version>
+        <version>2.3.4.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -19,8 +19,6 @@
     <description>Application to interact with adapters kkt</description>
 
     <properties>
-        <sonar.jacoco.reportPath>target/sites/jacoco/jacoco.exec</sonar.jacoco.reportPath>
-        <sonar.cobertura.reportPath>target/site/cobertura/coverage.xml</sonar.cobertura.reportPath>
         <server.port>8022</server.port>
         <stage>dev</stage>
         <exposed.ports>${server.port}</exposed.ports>
@@ -36,8 +34,7 @@
         <error-mapping.version>1.0.6</error-mapping.version>
         <cashreg-proto.version>1.15-f4f228b</cashreg-proto.version>
         <adapter-common-lib.version>0.0.26</adapter-common-lib.version>
-        <testcontainers.version>1.10.2</testcontainers.version>
-        <adapter-cashreg-spring-boot-starter.version>1.0.2</adapter-cashreg-spring-boot-starter.version>
+        <adapter-cashreg-spring-boot-starter.version>1.0.3</adapter-cashreg-spring-boot-starter.version>
         <spring-boot-starter-metrics-statsd.version>1.1.2</spring-boot-starter-metrics-statsd.version>
         <hibernate-validator.version>6.1.5.Final</hibernate-validator.version>
         <ipaddress.version>5.0.1</ipaddress.version>
@@ -219,23 +216,6 @@
                         <nonFilteredFileExtension>p12</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.2</version>
-                <configuration>
-                    <destFile>${sonar.jacoco.reportPath}</destFile>
-                    <append>true</append>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

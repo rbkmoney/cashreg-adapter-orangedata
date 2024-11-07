@@ -36,7 +36,7 @@
         <adapter-common-lib.version>0.0.26</adapter-common-lib.version>
         <adapter-cashreg-spring-boot-starter.version>1.0.3</adapter-cashreg-spring-boot-starter.version>
         <spring-boot-starter-metrics-statsd.version>1.1.2</spring-boot-starter-metrics-statsd.version>
-        <hibernate-validator.version>6.1.5.Final</hibernate-validator.version>
+        <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
         <ipaddress.version>5.0.1</ipaddress.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
